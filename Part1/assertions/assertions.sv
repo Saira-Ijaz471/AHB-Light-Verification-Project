@@ -18,7 +18,7 @@ module ahb_lite_htrans_assertions #(
     input                       HRESP
 );
 
-    // ---- local parameters for readability ----------------------
+    // ---- local parameters  ----------------------
     localparam IDLE   = 2'b00;
     localparam BUSY   = 2'b01;
     localparam NONSEQ = 2'b10;
@@ -114,9 +114,7 @@ module ahb_lite_htrans_assertions #(
 
     // ============================================================
     //  RULE 9 — IDLE transfer must be ignored by slave
-    //           Checked via HRESP=OKAY and no data side-effect
-    //           (protocol level — no memory change assertion here,
-    //            add in functional assertions section)
+    //           Checked via HRESP=OKAY  
     // ============================================================
     a_idle_ignored_hresp: assert property (
         @(posedge HCLK) disable iff (!HRESETn)
@@ -174,8 +172,7 @@ module ahb_lite_htrans_assertions #(
     //  RULE 14 — SEQ address must increment according to HSIZE
     //            HSIZE=0 : addr + 1
     //            HSIZE=1 : addr + 2
-    //            HSIZE=2 : addr + 4
-    //            (wrap burst case excluded here — add separately)
+    //            HSIZE=2 : addr + 4 
     // ============================================================
     a_seq_addr_increment: assert property (
         @(posedge HCLK) disable iff (!HRESETn)
