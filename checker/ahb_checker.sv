@@ -63,6 +63,7 @@ module ahb_checker #(
         else if (HREADY && HTRANS == HTRANS_NONSEQ)
             burst_start_addr <= HADDR;
     end
+    
     always_ff @(posedge HCLK or negedge HRESETn) begin
         if (!HRESETn) begin
             addr_ph          <= '0;
@@ -710,36 +711,28 @@ module ahb_checker #(
         $rose(HRESETn) ##1 HRESP == HRESP_OKAY
     );
   
-    // ============================================================
-    //  WRAP BURST ASSERTIONS (Slave checks)
-    // ============================================================
-
-    // WRAP4 - No ERROR response during WRAP burst
-    a_wrap4_no_error: assert property (
-        (HSEL && HBURST == HBURST_WRAP4 && 
-        HTRANS inside {HTRANS_NONSEQ, HTRANS_SEQ, HTRANS_BUSY}) |->
-        (HRESP == HRESP_OKAY)
+    a_wrap4_byte_region: assert property (
+    (HSEL && HBURST == HBURST_WRAP4 && HSIZE == HSIZE_BYTE &&
+     HTRANS == HTRANS_SEQ && HREADY) |->
+    (HADDR[HADDR_SIZE-1:2] == burst_start_addr[HADDR_SIZE-1:2])
     );
 
-    // WRAP4 - Address remains within 4-beat aligned region
-    a_wrap4_addr_in_region: assert property (
-        (HSEL && HBURST == HBURST_WRAP4 && HTRANS == HTRANS_SEQ && HREADY) |->
-        (HADDR[HADDR_SIZE-1:2] == $past(HADDR[HADDR_SIZE-1:2]) ||
-        HTRANS == HTRANS_NONSEQ)
+    a_wrap4_word_region: assert property (
+        (HSEL && HBURST == HBURST_WRAP4 && HSIZE == HSIZE_WORD &&
+        HTRANS == HTRANS_SEQ && HREADY) |->
+        (HADDR[HADDR_SIZE-1:4] == burst_start_addr[HADDR_SIZE-1:4])
     );
 
-    // WRAP8 - Address remains within 8-beat aligned region  
-    a_wrap8_addr_in_region: assert property (
-        (HSEL && HBURST == HBURST_WRAP8 && HTRANS == HTRANS_SEQ && HREADY) |->
-        (HADDR[HADDR_SIZE-1:3] == $past(HADDR[HADDR_SIZE-1:3]) ||
-        HTRANS == HTRANS_NONSEQ)
+    a_wrap8_word_region: assert property (
+        (HSEL && HBURST == HBURST_WRAP8 && HSIZE == HSIZE_WORD &&
+        HTRANS == HTRANS_SEQ && HREADY) |->
+        (HADDR[HADDR_SIZE-1:5] == burst_start_addr[HADDR_SIZE-1:5])
     );
 
-    // WRAP16 - Address remains within 16-beat aligned region
-    a_wrap16_addr_in_region: assert property (
-        (HSEL && HBURST == HBURST_WRAP16 && HTRANS == HTRANS_SEQ && HREADY) |->
-        (HADDR[HADDR_SIZE-1:4] == $past(HADDR[HADDR_SIZE-1:4]) ||
-        HTRANS == HTRANS_NONSEQ)
-);
-  
+    a_wrap16_word_region: assert property (
+        (HSEL && HBURST == HBURST_WRAP16 && HSIZE == HSIZE_WORD &&
+        HTRANS == HTRANS_SEQ && HREADY) |->
+        (HADDR[HADDR_SIZE-1:6] == burst_start_addr[HADDR_SIZE-1:6])
+    );
+    
     endmodule

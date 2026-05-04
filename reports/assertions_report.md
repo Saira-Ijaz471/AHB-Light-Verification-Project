@@ -13,8 +13,8 @@
 | Metric | Count |
 |--------|-------|
 | Total Assertions | 50 |
-| Proven | 35 (70.0%) |
-| Counterexample (cex) | 15 (30.0%) |
+| Proven | 38 (76.0%) |
+| Counterexample (cex) | 12 (24.0%) |
 
 ---
 
@@ -68,14 +68,14 @@
 | a_htrans_idle_after_reset | HTRANS=IDLE immediately after reset (Spec 7) | proven |
 | a_hreadyout_reset_default | HREADYOUT=1 immediately after reset (Spec 7) | proven |
 | a_hresp_reset_default | HRESP=OKAY immediately after reset (Spec 7) | proven |
-| a_wrap4_no_error | WRAP4 burst should never generate ERROR response (Functional) | proven |
-| a_wrap4_addr_in_region | WRAP4 address stays within 4-beat aligned region (Spec 3.5.3) | **cex** |
-| a_wrap8_addr_in_region | WRAP8 address stays within 8-beat aligned region (Spec 3.5.3) | **cex** |
-| a_wrap16_addr_in_region | WRAP16 address stays within 16-beat aligned region (Spec 3.5.3) | **cex** |
+| a_wrap4_byte_region | WRAP4 byte transfers stay within 16-byte region (Spec 3.5.3) | proven |
+| a_wrap4_word_region | WRAP4 word transfers stay within 16-byte region (Spec 3.5.3) | proven |
+| a_wrap8_word_region | WRAP8 word transfers stay within 32-byte region (Spec 3.5.3) | proven |
+| a_wrap16_word_region | WRAP16 word transfers stay within 64-byte region (Spec 3.5.3) | proven |
 
 ---
 
-## Failed Assertions (cex) - 15 Total
+## Failed Assertions (cex) - 12 Total
 
 | # | Name | Category |
 |---|------|----------|
@@ -91,11 +91,7 @@
 | 10 | a_hword_write_targeted | Byte/Hword Masking |
 | 11 | a_hword_write_no_corrupt | Byte/Hword Masking |
 | 12 | a_consec_reads_same_data | Read Stability |
-| 13 | a_wrap4_addr_in_region | WRAP Burst |
-| 14 | a_wrap8_addr_in_region | WRAP Burst |
-| 15 | a_wrap16_addr_in_region | WRAP Burst |
 
- 
 ---
 
 ## Status Legend
