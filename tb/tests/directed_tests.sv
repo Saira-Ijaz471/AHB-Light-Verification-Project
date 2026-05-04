@@ -412,6 +412,9 @@ initial begin
     //HREADY=0 — slave inserts wait states, master must hold address phase
     test_hready_hold();
 
+    //RAW
+    ahb_write(1, 32'h64, 32'hdeadbeaf, HSIZE_WORD);
+    ahb_read (0, 32'h64, HSIZE_WORD,  rdata_tb);
     $finish;
 
 end
