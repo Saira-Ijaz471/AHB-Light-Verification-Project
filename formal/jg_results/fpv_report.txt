@@ -1,0 +1,3103 @@
+
+==============================================================
+    Jasper Verification Results
+==============================================================
+    2025.06p002 64 bits for Linux64 3.10.0-1062.1.2.el7.x86_64
+    Host Name: pc2
+    User Name: Saima.Khalil
+    Printed on: Monday, May 4, 2026 09:28:10 PM PKT
+    Working Directory: /home/Saima.Khalil/Documents/LAB/AHB-Light-Verification-Project-main/formal
+
+
+==============================================================
+DESIGN INFO
+==============================================================
+    Top Level Module     : ahb3liten
+    Clocks               : HCLK
+    Resets               : ~HRESETn
+    Global Stopats       :     <none>
+    Global Assumptions   :     <none>
+
+==============================================================
+SUMMARY
+==============================================================
+    Total Tasks           : 1
+    Total Properties      : 250
+          assumptions     : 43                  
+           - approved     : 0                   ( 0.0% )
+           - temporary    : 43                  ( 100.0% )
+          assertions      : 50                  
+           - proven       : 35                  ( 70.0% )
+           - marked_proven: 0                   ( 0.0% )
+           - cex          : 15                  ( 30.0% )
+           - ar_cex       : 0                   ( 0.0% )
+           - undetermined : 0                   ( 0.0% )
+           - unprocessed  : 0                   ( 0.0% )
+           - error        : 0                   ( 0.0% )
+          covers          : 157                 
+           - unreachable  : 26                  ( 16.6% )
+           - covered      : 131                 ( 83.4% )
+           - ar_covered   : 0                   ( 0.0% )
+           - undetermined : 0                   ( 0.0% )
+           - unprocessed  : 0                   ( 0.0% )
+           - error        : 0                   ( 0.0% )
+
+==============================================================
+RESULTS
+==============================================================
+
+------------------------------------------------------------------------------------------------------------------------------------
+       Name                                                                        |    Result    |  Engine  |  Bound  |  Time    
+------------------------------------------------------------------------------------------------------------------------------------
+
+---[ <embedded> ]-------------------------------------------------------------------------------------------------------------------
+[1]   ahb3liten.checker_i.a_idle_okay_only                                              proven          PRE    Infinite    0.000 s      
+[2]   ahb3liten.checker_i.a_idle_okay_only:precondition1                                covered         Hp            1    0.051 s      
+[3]   ahb3liten.checker_i.c_idle_seen                                                   covered         Hp            1    0.051 s      
+[4]   ahb3liten.checker_i.a_idle_ignored_hresp                                          proven          PRE    Infinite    0.000 s      
+[5]   ahb3liten.checker_i.a_idle_ignored_hresp:precondition1                            covered         Hp            1    0.051 s      
+[6]   ahb3liten.checker_i.c_idle_ignored                                                covered         Hp            1    0.051 s      
+[7]   ahb3liten.checker_i.a_busy_okay_only                                              proven          PRE    Infinite    0.000 s      
+[8]   ahb3liten.checker_i.a_busy_okay_only:precondition1                                covered         Hp            1    0.053 s      
+[9]   ahb3liten.checker_i.c_busy_in_burst                                               covered         Hp            1    0.055 s      
+[10]  ahb3liten.checker_i.a_busy_ignored_hresp                                          proven          PRE    Infinite    0.000 s      
+[11]  ahb3liten.checker_i.a_busy_ignored_hresp:precondition1                            covered         Hp            1    0.053 s      
+[12]  ahb3liten.checker_i.c_busy_ignored                                                covered         Hp            1    0.053 s      
+[13]  ahb3liten.checker_i.a_only_nonseq_seq_transfer                                    proven          PRE    Infinite    0.000 s      
+[14]  ahb3liten.checker_i.a_only_nonseq_seq_transfer:precondition1                      covered         Hp            1    0.051 s      
+[15]  ahb3liten.checker_i.c_idle_busy_okay_resp                                         covered         Hp            1    0.053 s      
+[16]  ahb3liten.checker_i.a_hsize_invalid_error_c1                                      proven          Hp     Infinite    0.035 s      
+[17]  ahb3liten.checker_i.a_hsize_invalid_error_c1:precondition1                        unreachable     Hp     Infinite    0.035 s      
+[18]  ahb3liten.checker_i.c_hsize_error_c1                                              unreachable     PRE    Infinite    0.000 s      
+[19]  ahb3liten.checker_i.a_hsize_invalid_error_c2                                      proven          PRE    Infinite    0.000 s      
+[20]  ahb3liten.checker_i.a_hsize_invalid_error_c2:precondition1                        unreachable     PRE    Infinite    0.000 s      
+[21]  ahb3liten.checker_i.c_hsize_error_c2                                              unreachable     PRE    Infinite    0.000 s      
+[22]  ahb3liten.checker_i.a_hrdata_valid_final                                          proven          PRE    Infinite    0.000 s      
+[23]  ahb3liten.checker_i.a_hrdata_valid_final:precondition1                            covered         Hp            1    0.056 s      
+[24]  ahb3liten.checker_i.c_hrdata_valid_final                                          covered         Hp            1    0.056 s      
+[25]  ahb3liten.checker_i.a_error_cycle1_hready_low                                     proven          PRE    Infinite    0.000 s      
+[26]  ahb3liten.checker_i.a_error_cycle1_hready_low:precondition1                       unreachable     PRE    Infinite    0.000 s      
+[27]  ahb3liten.checker_i.c_error_first_cycle                                           unreachable     PRE    Infinite    0.000 s      
+[28]  ahb3liten.checker_i.a_error_cycle2_hready_high                                    proven          PRE    Infinite    0.000 s      
+[29]  ahb3liten.checker_i.a_error_cycle2_hready_high:precondition1                      unreachable     PRE    Infinite    0.000 s      
+[30]  ahb3liten.checker_i.c_error_second_cycle                                          unreachable     PRE    Infinite    0.000 s      
+[31]  ahb3liten.checker_i.a_error_max_2_cycles                                          proven          PRE    Infinite    0.000 s      
+[32]  ahb3liten.checker_i.a_error_max_2_cycles:precondition1                            unreachable     PRE    Infinite    0.000 s      
+[33]  ahb3liten.checker_i.c_error_ends                                                  unreachable     PRE    Infinite    0.000 s      
+[34]  ahb3liten.checker_i.a_hsel_0_hreadyout_default                                    proven          Hp     Infinite    0.269 s      
+[35]  ahb3liten.checker_i.a_hsel_0_hreadyout_default:precondition1                      covered         Hp            1    0.060 s      
+[36]  ahb3liten.checker_i.c_hsel_0_hready                                               covered         Hp            1    0.060 s      
+[37]  ahb3liten.checker_i.a_hsel_0_hresp_default                                        proven          PRE    Infinite    0.000 s      
+[38]  ahb3liten.checker_i.a_hsel_0_hresp_default:precondition1                          covered         Hp            1    0.060 s      
+[39]  ahb3liten.checker_i.c_hsel_0_hresp                                                covered         Hp            1    0.060 s      
+[40]  ahb3liten.checker_i.a_hsel_0_hrdata_safe                                          proven          PRE    Infinite    0.000 s      
+[41]  ahb3liten.checker_i.a_hsel_0_hrdata_safe:precondition1                            covered         Hp            1    0.060 s      
+[42]  ahb3liten.checker_i.c_hsel_0_hrdata_default                                       covered         Hp            1    0.060 s      
+[43]  ahb3liten.checker_i.a_hrdata_valid_on_hready                                      proven          PRE    Infinite    0.000 s      
+[44]  ahb3liten.checker_i.a_hrdata_valid_on_hready:precondition1                        covered         Hp            1    0.056 s      
+[45]  ahb3liten.checker_i.c_hrdata_final_valid                                          covered         Hp            1    0.056 s      
+[46]  ahb3liten.checker_i.a_hrdata_not_xz_valid_read                                    proven          PRE    Infinite    0.000 s      
+[47]  ahb3liten.checker_i.a_hrdata_not_xz_valid_read:precondition1                      covered         Hp            1    0.056 s      
+[48]  ahb3liten.checker_i.c_hrdata_not_xz                                               covered         Hp            1    0.056 s      
+[49]  ahb3liten.checker_i.c_hrdata_during_error                                         unreachable     PRE    Infinite    0.000 s      
+[50]  ahb3liten.checker_i.a_hwdata_valid_after_write                                    proven          PRE    Infinite    0.000 s      
+[51]  ahb3liten.checker_i.a_hwdata_valid_after_write:precondition1                      covered         Hp            1    0.063 s      
+[52]  ahb3liten.checker_i.c_hwdata_valid                                                covered         Hp            1    0.063 s      
+[53]  ahb3liten.checker_i.a_hresp_valid                                                 proven          PRE    Infinite    0.000 s      
+[54]  ahb3liten.checker_i.c_hresp_error_seen                                            unreachable     PRE    Infinite    0.000 s      
+[55]  ahb3liten.checker_i.a_hreadyout_no_xz                                             proven          PRE    Infinite    0.000 s      
+[56]  ahb3liten.checker_i.c_hreadyout_low                                               covered         Ht            2    0.007 s      
+[57]  ahb3liten.checker_i.a_write_read_correctness                                      cex             Ht            3    0.046 s      
+[58]  ahb3liten.checker_i.a_write_read_correctness:precondition1                        covered         Ht            2    0.010 s      
+[59]  ahb3liten.checker_i.c_write_then_read                                             covered         Ht            2    0.010 s      
+[60]  ahb3liten.checker_i.a_no_change_without_write                                     cex             Ht            3    0.049 s      
+[61]  ahb3liten.checker_i.a_no_change_without_write:precondition1                       covered         Bm            2    0.016 s      
+[62]  ahb3liten.checker_i.c_read_no_side_effect                                         covered         Bm            2    0.016 s      
+[63]  ahb3liten.checker_i.a_latest_write_wins                                           cex             Ht            3    0.046 s      
+[64]  ahb3liten.checker_i.a_latest_write_wins:precondition1                             covered         Ht            2    0.010 s      
+[65]  ahb3liten.checker_i.c_back2back_write                                             covered         Ht            2    0.010 s      
+[66]  ahb3liten.checker_i.a_word_write_atomic                                           cex             Ht            3    0.046 s      
+[67]  ahb3liten.checker_i.a_word_write_atomic:precondition1                             covered         Bm            2    0.020 s      
+[68]  ahb3liten.checker_i.c_word_write                                                  covered         Bm            2    0.020 s      
+[69]  ahb3liten.checker_i.a_no_mem_change_on_read                                       cex             Ht            3    0.049 s      
+[70]  ahb3liten.checker_i.a_no_mem_change_on_read:precondition1                         covered         Bm            2    0.016 s      
+[71]  ahb3liten.checker_i.c_read_no_change                                              covered         Bm            2    0.016 s      
+[72]  ahb3liten.checker_i.a_hwdata_ignored_read                                         proven          PRE    Infinite    0.000 s      
+[73]  ahb3liten.checker_i.a_hwdata_ignored_read:precondition1                           covered         Hp            1    0.070 s      
+[74]  ahb3liten.checker_i.c_read_hrdata_valid                                           covered         Hp            1    0.056 s      
+[75]  ahb3liten.checker_i.a_byte_write_targeted                                         cex             Ht            3    0.052 s      
+[76]  ahb3liten.checker_i.a_byte_write_targeted:precondition1                           covered         Ht            2    0.010 s      
+[77]  ahb3liten.checker_i.c_byte_write                                                  covered         Ht            2    0.010 s      
+[78]  ahb3liten.checker_i.a_byte_write_no_corrupt                                       cex             Ht            3    0.060 s      
+[79]  ahb3liten.checker_i.a_byte_write_no_corrupt:precondition1                         covered         Ht            2    0.010 s      
+[80]  ahb3liten.checker_i.c_byte_no_corrupt                                             covered         Ht            2    0.010 s      
+[81]  ahb3liten.checker_i.a_hword_write_targeted                                        cex             Ht            3    0.066 s      
+[82]  ahb3liten.checker_i.a_hword_write_targeted:precondition1                          covered         Bm            2    0.025 s      
+[83]  ahb3liten.checker_i.c_hword_write                                                 covered         Bm            2    0.025 s      
+[84]  ahb3liten.checker_i.a_hword_write_no_corrupt                                      cex             Ht            3    0.081 s      
+[85]  ahb3liten.checker_i.a_hword_write_no_corrupt:precondition1                        covered         Bm            2    0.025 s      
+[86]  ahb3liten.checker_i.c_hword_no_corrupt                                            covered         Bm            2    0.025 s      
+[87]  ahb3liten.checker_i.a_consec_reads_same_data                                      cex             Ht            3    0.049 s      
+[88]  ahb3liten.checker_i.a_consec_reads_same_data:precondition1                        covered         Bm            2    0.016 s      
+[89]  ahb3liten.checker_i.c_two_reads_same                                              covered         Bm            2    0.016 s      
+[90]  ahb3liten.checker_i.a_first_read_after_reset                                      proven          PRE    Infinite    0.000 s      
+[91]  ahb3liten.checker_i.a_first_read_after_reset:precondition1                        covered         Ht            2    0.010 s      
+[92]  ahb3liten.checker_i.c_first_read_post_reset                                       covered         Ht            2    0.010 s      
+[93]  ahb3liten.checker_i.a_read_after_write                                            cex             Ht            3    0.052 s      
+[94]  ahb3liten.checker_i.a_read_after_write:precondition1                              covered         Ht            2    0.010 s      
+[95]  ahb3liten.checker_i.c_raw_scenario                                                covered         Ht            2    0.010 s      
+[96]  ahb3liten.checker_i.a_read_data_not_xz                                            proven          PRE    Infinite    0.000 s      
+[97]  ahb3liten.checker_i.a_read_data_not_xz:precondition1                              covered         Bm            2    0.016 s      
+[98]  ahb3liten.checker_i.c_read_not_xz                                                 covered         Bm            2    0.016 s      
+[99]  ahb3liten.checker_i.a_pipeline_write_correct                                      proven          PRE    Infinite    0.000 s      
+[100] ahb3liten.checker_i.a_pipeline_write_correct:precondition1                        covered         Ht            2    0.010 s      
+[101] ahb3liten.checker_i.c_pipeline_write                                              covered         Ht            2    0.010 s      
+[102] ahb3liten.checker_i.a_no_data_leakage                                             proven          PRE    Infinite    0.000 s      
+[103] ahb3liten.checker_i.a_no_data_leakage:precondition1                               covered         Bm            2    0.029 s      
+[104] ahb3liten.checker_i.c_pipeline_no_leak                                            covered         Bm            2    0.029 s      
+[105] ahb3liten.checker_i.a_pipeline_rw_ordering                                        cex             Ht            3    0.046 s      
+[106] ahb3liten.checker_i.a_pipeline_rw_ordering:precondition1                          covered         Ht            2    0.010 s      
+[107] ahb3liten.checker_i.c_pipeline_rw                                                 covered         Ht            2    0.010 s      
+[108] ahb3liten.checker_i.a_pipeline_addr_data_assoc                                    proven          PRE    Infinite    0.000 s      
+[109] ahb3liten.checker_i.a_pipeline_addr_data_assoc:precondition1                      covered         Ht            2    0.010 s      
+[110] ahb3liten.checker_i.c_pipeline_assoc                                              covered         Ht            2    0.010 s      
+[111] ahb3liten.checker_i.a_out_of_range_error                                          proven          Hp     Infinite    0.270 s      
+[112] ahb3liten.checker_i.a_out_of_range_error:precondition1                            unreachable     Hp     Infinite    0.035 s      
+[113] ahb3liten.checker_i.c_out_of_range                                                unreachable     Hp     Infinite    0.035 s      
+[114] ahb3liten.checker_i.a_incr_no_mem_boundary_cross                                  proven          Hp     Infinite    0.035 s      
+[115] ahb3liten.checker_i.a_incr_no_mem_boundary_cross:precondition1                    covered         Hp            1    0.071 s      
+[116] ahb3liten.checker_i.c_incr_within_mem                                             covered         Hp            1    0.072 s      
+[117] ahb3liten.checker_i.a_hready_high_after_reset                                     proven          Ht     Infinite    0.121 s      
+[118] ahb3liten.checker_i.a_hready_high_after_reset:precondition1                       covered         Hp            1    0.051 s      
+[119] ahb3liten.checker_i.c_hready_post_reset                                           covered         Ht            2    0.010 s      
+[120] ahb3liten.checker_i.a_hresp_okay_after_reset                                      proven          PRE    Infinite    0.000 s      
+[121] ahb3liten.checker_i.a_hresp_okay_after_reset:precondition1                        covered         Hp            1    0.051 s      
+[122] ahb3liten.checker_i.c_hresp_post_reset                                            covered         Ht            2    0.007 s      
+[123] ahb3liten.checker_i.a_reset_aborts_transaction                                    proven          PRE    Infinite    0.000 s      
+[124] ahb3liten.checker_i.a_reset_aborts_transaction:precondition1                      unreachable     PRE    Infinite    0.000 s      
+[125] ahb3liten.checker_i.c_reset_mid_tx                                                unreachable     PRE    Infinite    0.000 s      
+[126] ahb3liten.checker_i.a_reset_no_mem_corrupt                                        proven          PRE    Infinite    0.000 s      
+[127] ahb3liten.checker_i.a_reset_no_mem_corrupt:precondition1                          covered         Ht            2    0.010 s      
+[128] ahb3liten.checker_i.c_read_post_reset                                             covered         Ht            2    0.010 s      
+[129] ahb3liten.checker_i.a_htrans_idle_after_reset                                     proven          PRE    Infinite    0.000 s      
+[130] ahb3liten.checker_i.a_htrans_idle_after_reset:precondition1                       unreachable     PRE    Infinite    0.000 s      
+[131] ahb3liten.checker_i.c_idle_post_reset                                             covered         Bm            2    0.014 s      
+[132] ahb3liten.checker_i.a_hreadyout_reset_default                                     proven          PRE    Infinite    0.000 s      
+[133] ahb3liten.checker_i.a_hreadyout_reset_default:precondition1                       unreachable     PRE    Infinite    0.000 s      
+[134] ahb3liten.checker_i.c_hreadyout_reset                                             covered         Ht            2    0.010 s      
+[135] ahb3liten.checker_i.a_hresp_reset_default                                         proven          PRE    Infinite    0.000 s      
+[136] ahb3liten.checker_i.a_hresp_reset_default:precondition1                           unreachable     PRE    Infinite    0.000 s      
+[137] ahb3liten.checker_i.c_hresp_reset                                                 covered         Ht            2    0.007 s      
+[138] ahb3liten.checker_i.a_wrap4_no_error                                              proven          PRE    Infinite    0.000 s      
+[139] ahb3liten.checker_i.a_wrap4_no_error:precondition1                                covered         Hp            1    0.074 s      
+[140] ahb3liten.checker_i.a_wrap4_addr_in_region                                        cex             Hp            1    0.075 s      
+[141] ahb3liten.checker_i.a_wrap4_addr_in_region:precondition1                          covered         Hp            1    0.075 s      
+[142] ahb3liten.checker_i.a_wrap8_addr_in_region                                        cex             Hp            1    0.083 s      
+[143] ahb3liten.checker_i.a_wrap8_addr_in_region:precondition1                          covered         Hp            1    0.083 s      
+[144] ahb3liten.checker_i.a_wrap16_addr_in_region                                       cex             Hp            1    0.086 s      
+[145] ahb3liten.checker_i.a_wrap16_addr_in_region:precondition1                         covered         Hp            1    0.086 s      
+[146] ahb3liten.assumptions_i.am_seq_after_nonseq_or_seq:precondition1                  covered         Hp            1    0.071 s      
+[147] ahb3liten.assumptions_i.am_no_busy_in_single:precondition1                        covered         Hp            1    0.093 s      
+[148] ahb3liten.assumptions_i.am_busy_only_in_active_burst:precondition1                covered         Hp            1    0.056 s      
+[149] ahb3liten.assumptions_i.am_busy_last_only_in_incr:precondition1                   covered         Hp            1    0.056 s      
+[150] ahb3liten.assumptions_i.am_burst_starts_nonseq:precondition1                      covered         Hp            1    0.095 s      
+[151] ahb3liten.assumptions_i.am_single_followed_by_idle_nonseq:precondition1           covered         Hp            1    0.096 s      
+[152] ahb3liten.assumptions_i.am_incr_valid_continuation:precondition1                  covered         Hp            1    0.102 s      
+[153] ahb3liten.assumptions_i.am_htrans_stable_wait:precondition1                       covered         Hp            1    0.103 s      
+[154] ahb3liten.assumptions_i.am_master_idle_after_error:precondition1                  unreachable     PRE    Infinite    0.000 s      
+[155] ahb3liten.assumptions_i.am_haddr_aligned:precondition1                            covered         Hp            1    0.070 s      
+[156] ahb3liten.assumptions_i.am_haddr_stable_wait:precondition1                        covered         Hp            1    0.103 s      
+[157] ahb3liten.assumptions_i.am_incr_no_1kb_cross:precondition1                        covered         Hp            1    0.071 s      
+[158] ahb3liten.assumptions_i.am_haddr_in_range:precondition1                           covered         Hp            1    0.070 s      
+[159] ahb3liten.assumptions_i.am_busy_addr_reflects_next:precondition1                  covered         Hp            1    0.056 s      
+[160] ahb3liten.assumptions_i.am_seq_addr_increment:precondition1                       covered         Hp            1    0.104 s      
+[161] ahb3liten.assumptions_i.am_hburst_constant_burst:precondition1                    covered         Hp            1    0.056 s      
+[162] ahb3liten.assumptions_i.am_hburst_stable_wait:precondition1                       covered         Hp            1    0.103 s      
+[163] ahb3liten.assumptions_i.am_hsize_constant_burst:precondition1                     covered         Hp            1    0.056 s      
+[164] ahb3liten.assumptions_i.am_hsize_stable_wait:precondition1                        covered         Hp            1    0.103 s      
+[165] ahb3liten.assumptions_i.am_hsize_valid_32bit:precondition1                        covered         Hp            1    0.070 s      
+[166] ahb3liten.assumptions_i.am_hwrite_stable_wait:precondition1                       covered         Hp            1    0.103 s      
+[167] ahb3liten.assumptions_i.am_seq_control_stable:precondition1                       covered         Hp            1    0.071 s      
+[168] ahb3liten.assumptions_i.am_hwdata_stable_until_hready:precondition1               covered         Hp            1    0.104 s      
+[169] ahb3liten.assumptions_i.am_hwdata_not_xz:precondition1                            covered         Hp            1    0.063 s      
+[170] ahb3liten.assumptions_i.am_haddr_no_xz:precondition1                              covered         Hp            1    0.070 s      
+[171] ahb3liten.assumptions_i.am_htrans_no_xz:precondition1                             covered         Hp            1    0.051 s      
+[172] ahb3liten.assumptions_i.am_hwrite_no_xz:precondition1                             covered         Hp            1    0.070 s      
+[173] ahb3liten.assumptions_i.am_hburst_no_xz:precondition1                             covered         Hp            1    0.070 s      
+[174] ahb3liten.assumptions_i.am_hsize_no_xz:precondition1                              covered         Hp            1    0.070 s      
+[175] ahb3liten.assumptions_i.am_htrans_idle_after_reset:precondition1                  unreachable     PRE    Infinite    0.000 s      
+[176] ahb3liten.assumptions_i.am_no_transfer_during_reset:precondition1                 unreachable     PRE    Infinite    0.000 s      
+[177] ahb3liten.assumptions_i.am_hsel_deasserted_reset:precondition1                    unreachable     PRE    Infinite    0.000 s      
+[178] ahb3liten.assumptions_i.am_wrap4_no_region_cross_byte:precondition1               covered         Hp            1    0.107 s      
+[179] ahb3liten.assumptions_i.am_wrap4_no_region_cross_hword:precondition1              covered         Hp            1    0.074 s      
+[180] ahb3liten.assumptions_i.am_wrap4_no_region_cross_word:precondition1               covered         Hp            1    0.116 s      
+[181] ahb3liten.assumptions_i.am_wrap8_no_region_cross_byte:precondition1               covered         Hp            1    0.118 s      
+[182] ahb3liten.assumptions_i.am_wrap8_no_region_cross_hword:precondition1              covered         Hp            1    0.070 s      
+[183] ahb3liten.assumptions_i.am_wrap8_no_region_cross_word:precondition1               covered         Hp            1    0.120 s      
+[184] ahb3liten.assumptions_i.am_wrap16_no_region_cross_byte:precondition1              covered         Hp            1    0.124 s      
+[185] ahb3liten.assumptions_i.am_wrap16_no_region_cross_hword:precondition1             covered         Hp            1    0.086 s      
+[186] ahb3liten.assumptions_i.am_wrap16_no_region_cross_word:precondition1              covered         Hp            1    0.126 s      
+[187] ahb3liten.cover_i.cov_hready_low_3cycles                                          unreachable     Hp     Infinite    0.280 s      
+[188] ahb3liten.cover_i.cov_wrap4_actual_wrap                                           covered         Hp            1    0.135 s      
+[189] ahb3liten.cover_i.cov_write_then_read_same_addr                                   covered         Ht            2    0.010 s      
+[190] ahb3liten.cover_i.cov_hresp_error                                                 unreachable     PRE    Infinite    0.000 s      
+[191] ahb3liten.cover_i.cov_back2back_nonseq                                            covered         Ht            2    0.010 s      
+[192] ahb3liten.cover_i.cov_busy_in_incr_burst                                          covered         Ht            4    0.106 s      
+[193] ahb3liten.cover_i.cov_byte_write_lane0                                            covered         Hp            1    0.137 s      
+[194] ahb3liten.cover_i.cov_byte_write_lane1                                            covered         Hp            1    0.139 s      
+[195] ahb3liten.cover_i.cov_byte_write_lane2                                            covered         Hp            1    0.140 s      
+[196] ahb3liten.cover_i.cov_byte_write_lane3                                            covered         Hp            1    0.141 s      
+[197] ahb3liten.cover_i.cov_hword_write_low                                             covered         Hp            1    0.147 s      
+[198] ahb3liten.cover_i.cov_hword_write_high                                            covered         Hp            1    0.151 s      
+[199] ahb3liten.cover_i.cov_reset_mid_transaction                                       unreachable     PRE    Infinite    0.000 s      
+[200] ahb3liten.cover_i.cov_incr4_write_burst                                           covered         Ht            5    0.114 s      
+[201] ahb3liten.cover_i.cov_wrap4_full_burst                                            covered         Ht            5    0.120 s      
+[202] ahb3liten.cover_i.cov_back2back_writes_same_addr                                  covered         Ht            2    0.032 s      
+[203] ahb3liten.cover_i.cov_first_read_after_reset                                      covered         Ht            2    0.010 s      
+[204] ahb3liten.cover_i.cov_wait_state_in_burst                                         covered         Ht            3    0.097 s      
+[205] ahb3liten.cover_i.cov_wrap8_actual_wrap                                           covered         Hp            1    0.153 s      
+[206] ahb3liten.cover_i.cov_byte_write_then_read                                        covered         Ht            2    0.010 s      
+[207] ahb3liten.cover_i.cov_word_write_byte_read                                        covered         Bm            2    0.034 s      
+
+==============================================================
+ASSUMPTIONS
+==============================================================
+
+-------------------------------------------------------------------------------
+       Name    |  Expression  |  Location     |  Status      |  Dependencies                  
+-------------------------------------------------------------------------------
+[1]   <embedded>::ahb3liten.assumptions_i.am_htrans_valid  assumptions_i.am_htrans_valid  N/A temporary
+[2]   <embedded>::ahb3liten.assumptions_i.am_seq_after_nonseq_or_seq  assumptions_i.am_seq_after_nonseq_or_seq  N/A temporary
+[3]   <embedded>::ahb3liten.assumptions_i.am_no_busy_in_single  assumptions_i.am_no_busy_in_single  N/A temporary
+[4]   <embedded>::ahb3liten.assumptions_i.am_busy_only_in_active_burst  assumptions_i.am_busy_only_in_active_burst  N/A temporary
+[5]   <embedded>::ahb3liten.assumptions_i.am_busy_last_only_in_incr  assumptions_i.am_busy_last_only_in_incr  N/A temporary
+[6]   <embedded>::ahb3liten.assumptions_i.am_burst_starts_nonseq  assumptions_i.am_burst_starts_nonseq  N/A temporary
+[7]   <embedded>::ahb3liten.assumptions_i.am_single_followed_by_idle_nonseq  assumptions_i.am_single_followed_by_idle_nonseq  N/A temporary
+[8]   <embedded>::ahb3liten.assumptions_i.am_incr_valid_continuation  assumptions_i.am_incr_valid_continuation  N/A temporary
+[9]   <embedded>::ahb3liten.assumptions_i.am_htrans_stable_wait  assumptions_i.am_htrans_stable_wait  N/A temporary
+[10]  <embedded>::ahb3liten.assumptions_i.am_master_idle_after_error  assumptions_i.am_master_idle_after_error  N/A temporary
+[11]  <embedded>::ahb3liten.assumptions_i.am_haddr_aligned  assumptions_i.am_haddr_aligned  N/A temporary
+[12]  <embedded>::ahb3liten.assumptions_i.am_haddr_stable_wait  assumptions_i.am_haddr_stable_wait  N/A temporary
+[13]  <embedded>::ahb3liten.assumptions_i.am_incr_no_1kb_cross  assumptions_i.am_incr_no_1kb_cross  N/A temporary
+[14]  <embedded>::ahb3liten.assumptions_i.am_haddr_in_range  assumptions_i.am_haddr_in_range  N/A temporary
+[15]  <embedded>::ahb3liten.assumptions_i.am_busy_addr_reflects_next  assumptions_i.am_busy_addr_reflects_next  N/A temporary
+[16]  <embedded>::ahb3liten.assumptions_i.am_seq_addr_increment  assumptions_i.am_seq_addr_increment  N/A temporary
+[17]  <embedded>::ahb3liten.assumptions_i.am_hburst_constant_burst  assumptions_i.am_hburst_constant_burst  N/A temporary
+[18]  <embedded>::ahb3liten.assumptions_i.am_hburst_stable_wait  assumptions_i.am_hburst_stable_wait  N/A temporary
+[19]  <embedded>::ahb3liten.assumptions_i.am_hsize_constant_burst  assumptions_i.am_hsize_constant_burst  N/A temporary
+[20]  <embedded>::ahb3liten.assumptions_i.am_hsize_stable_wait  assumptions_i.am_hsize_stable_wait  N/A temporary
+[21]  <embedded>::ahb3liten.assumptions_i.am_hsize_valid_32bit  assumptions_i.am_hsize_valid_32bit  N/A temporary
+[22]  <embedded>::ahb3liten.assumptions_i.am_hwrite_stable_wait  assumptions_i.am_hwrite_stable_wait  N/A temporary
+[23]  <embedded>::ahb3liten.assumptions_i.am_seq_control_stable  assumptions_i.am_seq_control_stable  N/A temporary
+[24]  <embedded>::ahb3liten.assumptions_i.am_hwdata_stable_until_hready  assumptions_i.am_hwdata_stable_until_hready  N/A temporary
+[25]  <embedded>::ahb3liten.assumptions_i.am_hwdata_not_xz  assumptions_i.am_hwdata_not_xz  N/A temporary
+[26]  <embedded>::ahb3liten.assumptions_i.am_haddr_no_xz  assumptions_i.am_haddr_no_xz  N/A temporary
+[27]  <embedded>::ahb3liten.assumptions_i.am_htrans_no_xz  assumptions_i.am_htrans_no_xz  N/A temporary
+[28]  <embedded>::ahb3liten.assumptions_i.am_hwrite_no_xz  assumptions_i.am_hwrite_no_xz  N/A temporary
+[29]  <embedded>::ahb3liten.assumptions_i.am_hburst_no_xz  assumptions_i.am_hburst_no_xz  N/A temporary
+[30]  <embedded>::ahb3liten.assumptions_i.am_hsize_no_xz  assumptions_i.am_hsize_no_xz  N/A temporary
+[31]  <embedded>::ahb3liten.assumptions_i.am_hsel_no_xz  assumptions_i.am_hsel_no_xz  N/A temporary
+[32]  <embedded>::ahb3liten.assumptions_i.am_htrans_idle_after_reset  assumptions_i.am_htrans_idle_after_reset  N/A temporary
+[33]  <embedded>::ahb3liten.assumptions_i.am_no_transfer_during_reset  assumptions_i.am_no_transfer_during_reset  N/A temporary
+[34]  <embedded>::ahb3liten.assumptions_i.am_hsel_deasserted_reset  assumptions_i.am_hsel_deasserted_reset  N/A temporary
+[35]  <embedded>::ahb3liten.assumptions_i.am_wrap4_no_region_cross_byte  assumptions_i.am_wrap4_no_region_cross_byte  N/A temporary
+[36]  <embedded>::ahb3liten.assumptions_i.am_wrap4_no_region_cross_hword  assumptions_i.am_wrap4_no_region_cross_hword  N/A temporary
+[37]  <embedded>::ahb3liten.assumptions_i.am_wrap4_no_region_cross_word  assumptions_i.am_wrap4_no_region_cross_word  N/A temporary
+[38]  <embedded>::ahb3liten.assumptions_i.am_wrap8_no_region_cross_byte  assumptions_i.am_wrap8_no_region_cross_byte  N/A temporary
+[39]  <embedded>::ahb3liten.assumptions_i.am_wrap8_no_region_cross_hword  assumptions_i.am_wrap8_no_region_cross_hword  N/A temporary
+[40]  <embedded>::ahb3liten.assumptions_i.am_wrap8_no_region_cross_word  assumptions_i.am_wrap8_no_region_cross_word  N/A temporary
+[41]  <embedded>::ahb3liten.assumptions_i.am_wrap16_no_region_cross_byte  assumptions_i.am_wrap16_no_region_cross_byte  N/A temporary
+[42]  <embedded>::ahb3liten.assumptions_i.am_wrap16_no_region_cross_hword  assumptions_i.am_wrap16_no_region_cross_hword  N/A temporary
+[43]  <embedded>::ahb3liten.assumptions_i.am_wrap16_no_region_cross_word  assumptions_i.am_wrap16_no_region_cross_word  N/A temporary
+
+==============================================================
+DETAILED RESULTS
+==============================================================
+
+---[ <embedded> ]--------------------------------------------------------------
+[1]
+    Name       : ahb3liten.checker_i.a_idle_okay_only
+    Expression : checker_i.a_idle_okay_only
+    Type       : assert
+    Location   : ../checker/ahb_checker.sv, 91
+
+    Result     : proven
+    Bound      : Infinite
+    Time       : 0.000 s
+    Engine     : PRE
+
+
+[2]
+    Name       : ahb3liten.checker_i.a_idle_okay_only:precondition1
+    Expression : checker_i.a_idle_okay_only_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 91
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.051 s
+    Engine     : Hp
+
+
+[3]
+    Name       : ahb3liten.checker_i.c_idle_seen
+    Expression : checker_i.c_idle_seen
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 95
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.051 s
+    Engine     : Hp
+
+
+[4]
+    Name       : ahb3liten.checker_i.a_idle_ignored_hresp
+    Expression : checker_i.a_idle_ignored_hresp
+    Type       : assert
+    Location   : ../checker/ahb_checker.sv, 101
+
+    Result     : proven
+    Bound      : Infinite
+    Time       : 0.000 s
+    Engine     : PRE
+
+
+[5]
+    Name       : ahb3liten.checker_i.a_idle_ignored_hresp:precondition1
+    Expression : checker_i.a_idle_ignored_hresp_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 101
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.051 s
+    Engine     : Hp
+
+
+[6]
+    Name       : ahb3liten.checker_i.c_idle_ignored
+    Expression : checker_i.c_idle_ignored
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 105
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.051 s
+    Engine     : Hp
+
+
+[7]
+    Name       : ahb3liten.checker_i.a_busy_okay_only
+    Expression : checker_i.a_busy_okay_only
+    Type       : assert
+    Location   : ../checker/ahb_checker.sv, 112
+
+    Result     : proven
+    Bound      : Infinite
+    Time       : 0.000 s
+    Engine     : PRE
+
+
+[8]
+    Name       : ahb3liten.checker_i.a_busy_okay_only:precondition1
+    Expression : checker_i.a_busy_okay_only_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 112
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.053 s
+    Engine     : Hp
+
+
+[9]
+    Name       : ahb3liten.checker_i.c_busy_in_burst
+    Expression : checker_i.c_busy_in_burst
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 116
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.055 s
+    Engine     : Hp
+
+
+[10]
+    Name       : ahb3liten.checker_i.a_busy_ignored_hresp
+    Expression : checker_i.a_busy_ignored_hresp
+    Type       : assert
+    Location   : ../checker/ahb_checker.sv, 124
+
+    Result     : proven
+    Bound      : Infinite
+    Time       : 0.000 s
+    Engine     : PRE
+
+
+[11]
+    Name       : ahb3liten.checker_i.a_busy_ignored_hresp:precondition1
+    Expression : checker_i.a_busy_ignored_hresp_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 124
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.053 s
+    Engine     : Hp
+
+
+[12]
+    Name       : ahb3liten.checker_i.c_busy_ignored
+    Expression : checker_i.c_busy_ignored
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 128
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.053 s
+    Engine     : Hp
+
+
+[13]
+    Name       : ahb3liten.checker_i.a_only_nonseq_seq_transfer
+    Expression : checker_i.a_only_nonseq_seq_transfer
+    Type       : assert
+    Location   : ../checker/ahb_checker.sv, 134
+
+    Result     : proven
+    Bound      : Infinite
+    Time       : 0.000 s
+    Engine     : PRE
+
+
+[14]
+    Name       : ahb3liten.checker_i.a_only_nonseq_seq_transfer:precondition1
+    Expression : checker_i.a_only_nonseq_seq_transfer_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 134
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.051 s
+    Engine     : Hp
+
+
+[15]
+    Name       : ahb3liten.checker_i.c_idle_busy_okay_resp
+    Expression : checker_i.c_idle_busy_okay_resp
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 138
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.053 s
+    Engine     : Hp
+
+
+[16]
+    Name       : ahb3liten.checker_i.a_hsize_invalid_error_c1
+    Expression : checker_i.a_hsize_invalid_error_c1
+    Type       : assert
+    Location   : ../checker/ahb_checker.sv, 145
+
+    Result     : proven
+    Bound      : Infinite
+    Time       : 0.035 s
+    Engine     : Hp
+
+
+[17]
+    Name       : ahb3liten.checker_i.a_hsize_invalid_error_c1:precondition1
+    Expression : checker_i.a_hsize_invalid_error_c1_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 145
+
+    Result     : unreachable
+    Bound      : Infinite
+    Time       : 0.035 s
+    Engine     : Hp
+
+
+[18]
+    Name       : ahb3liten.checker_i.c_hsize_error_c1
+    Expression : checker_i.c_hsize_error_c1
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 150
+
+    Result     : unreachable
+    Bound      : Infinite
+    Time       : 0.000 s
+    Engine     : PRE
+
+
+[19]
+    Name       : ahb3liten.checker_i.a_hsize_invalid_error_c2
+    Expression : checker_i.a_hsize_invalid_error_c2
+    Type       : assert
+    Location   : ../checker/ahb_checker.sv, 157
+
+    Result     : proven
+    Bound      : Infinite
+    Time       : 0.000 s
+    Engine     : PRE
+
+
+[20]
+    Name       : ahb3liten.checker_i.a_hsize_invalid_error_c2:precondition1
+    Expression : checker_i.a_hsize_invalid_error_c2_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 157
+
+    Result     : unreachable
+    Bound      : Infinite
+    Time       : 0.000 s
+    Engine     : PRE
+
+
+[21]
+    Name       : ahb3liten.checker_i.c_hsize_error_c2
+    Expression : checker_i.c_hsize_error_c2
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 164
+
+    Result     : unreachable
+    Bound      : Infinite
+    Time       : 0.000 s
+    Engine     : PRE
+
+
+[22]
+    Name       : ahb3liten.checker_i.a_hrdata_valid_final
+    Expression : checker_i.a_hrdata_valid_final
+    Type       : assert
+    Location   : ../checker/ahb_checker.sv, 172
+
+    Result     : proven
+    Bound      : Infinite
+    Time       : 0.000 s
+    Engine     : PRE
+
+
+[23]
+    Name       : ahb3liten.checker_i.a_hrdata_valid_final:precondition1
+    Expression : checker_i.a_hrdata_valid_final_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 172
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.056 s
+    Engine     : Hp
+
+
+[24]
+    Name       : ahb3liten.checker_i.c_hrdata_valid_final
+    Expression : checker_i.c_hrdata_valid_final
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 181
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.056 s
+    Engine     : Hp
+
+
+[25]
+    Name       : ahb3liten.checker_i.a_error_cycle1_hready_low
+    Expression : checker_i.a_error_cycle1_hready_low
+    Type       : assert
+    Location   : ../checker/ahb_checker.sv, 196
+
+    Result     : proven
+    Bound      : Infinite
+    Time       : 0.000 s
+    Engine     : PRE
+
+
+[26]
+    Name       : ahb3liten.checker_i.a_error_cycle1_hready_low:precondition1
+    Expression : checker_i.a_error_cycle1_hready_low_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 196
+
+    Result     : unreachable
+    Bound      : Infinite
+    Time       : 0.000 s
+    Engine     : PRE
+
+
+[27]
+    Name       : ahb3liten.checker_i.c_error_first_cycle
+    Expression : checker_i.c_error_first_cycle
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 201
+
+    Result     : unreachable
+    Bound      : Infinite
+    Time       : 0.000 s
+    Engine     : PRE
+
+
+[28]
+    Name       : ahb3liten.checker_i.a_error_cycle2_hready_high
+    Expression : checker_i.a_error_cycle2_hready_high
+    Type       : assert
+    Location   : ../checker/ahb_checker.sv, 209
+
+    Result     : proven
+    Bound      : Infinite
+    Time       : 0.000 s
+    Engine     : PRE
+
+
+[29]
+    Name       : ahb3liten.checker_i.a_error_cycle2_hready_high:precondition1
+    Expression : checker_i.a_error_cycle2_hready_high_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 209
+
+    Result     : unreachable
+    Bound      : Infinite
+    Time       : 0.000 s
+    Engine     : PRE
+
+
+[30]
+    Name       : ahb3liten.checker_i.c_error_second_cycle
+    Expression : checker_i.c_error_second_cycle
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 214
+
+    Result     : unreachable
+    Bound      : Infinite
+    Time       : 0.000 s
+    Engine     : PRE
+
+
+[31]
+    Name       : ahb3liten.checker_i.a_error_max_2_cycles
+    Expression : checker_i.a_error_max_2_cycles
+    Type       : assert
+    Location   : ../checker/ahb_checker.sv, 222
+
+    Result     : proven
+    Bound      : Infinite
+    Time       : 0.000 s
+    Engine     : PRE
+
+
+[32]
+    Name       : ahb3liten.checker_i.a_error_max_2_cycles:precondition1
+    Expression : checker_i.a_error_max_2_cycles_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 222
+
+    Result     : unreachable
+    Bound      : Infinite
+    Time       : 0.000 s
+    Engine     : PRE
+
+
+[33]
+    Name       : ahb3liten.checker_i.c_error_ends
+    Expression : checker_i.c_error_ends
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 227
+
+    Result     : unreachable
+    Bound      : Infinite
+    Time       : 0.000 s
+    Engine     : PRE
+
+
+[34]
+    Name       : ahb3liten.checker_i.a_hsel_0_hreadyout_default
+    Expression : checker_i.a_hsel_0_hreadyout_default
+    Type       : assert
+    Location   : ../checker/ahb_checker.sv, 239
+
+    Result     : proven
+    Bound      : Infinite
+    Time       : 0.269 s
+    Engine     : Hp
+
+
+[35]
+    Name       : ahb3liten.checker_i.a_hsel_0_hreadyout_default:precondition1
+    Expression : checker_i.a_hsel_0_hreadyout_default_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 239
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.060 s
+    Engine     : Hp
+
+
+[36]
+    Name       : ahb3liten.checker_i.c_hsel_0_hready
+    Expression : checker_i.c_hsel_0_hready
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 242
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.060 s
+    Engine     : Hp
+
+
+[37]
+    Name       : ahb3liten.checker_i.a_hsel_0_hresp_default
+    Expression : checker_i.a_hsel_0_hresp_default
+    Type       : assert
+    Location   : ../checker/ahb_checker.sv, 248
+
+    Result     : proven
+    Bound      : Infinite
+    Time       : 0.000 s
+    Engine     : PRE
+
+
+[38]
+    Name       : ahb3liten.checker_i.a_hsel_0_hresp_default:precondition1
+    Expression : checker_i.a_hsel_0_hresp_default_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 248
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.060 s
+    Engine     : Hp
+
+
+[39]
+    Name       : ahb3liten.checker_i.c_hsel_0_hresp
+    Expression : checker_i.c_hsel_0_hresp
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 251
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.060 s
+    Engine     : Hp
+
+
+[40]
+    Name       : ahb3liten.checker_i.a_hsel_0_hrdata_safe
+    Expression : checker_i.a_hsel_0_hrdata_safe
+    Type       : assert
+    Location   : ../checker/ahb_checker.sv, 257
+
+    Result     : proven
+    Bound      : Infinite
+    Time       : 0.000 s
+    Engine     : PRE
+
+
+[41]
+    Name       : ahb3liten.checker_i.a_hsel_0_hrdata_safe:precondition1
+    Expression : checker_i.a_hsel_0_hrdata_safe_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 257
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.060 s
+    Engine     : Hp
+
+
+[42]
+    Name       : ahb3liten.checker_i.c_hsel_0_hrdata_default
+    Expression : checker_i.c_hsel_0_hrdata_default
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 260
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.060 s
+    Engine     : Hp
+
+
+[43]
+    Name       : ahb3liten.checker_i.a_hrdata_valid_on_hready
+    Expression : checker_i.a_hrdata_valid_on_hready
+    Type       : assert
+    Location   : ../checker/ahb_checker.sv, 271
+
+    Result     : proven
+    Bound      : Infinite
+    Time       : 0.000 s
+    Engine     : PRE
+
+
+[44]
+    Name       : ahb3liten.checker_i.a_hrdata_valid_on_hready:precondition1
+    Expression : checker_i.a_hrdata_valid_on_hready_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 271
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.056 s
+    Engine     : Hp
+
+
+[45]
+    Name       : ahb3liten.checker_i.c_hrdata_final_valid
+    Expression : checker_i.c_hrdata_final_valid
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 277
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.056 s
+    Engine     : Hp
+
+
+[46]
+    Name       : ahb3liten.checker_i.a_hrdata_not_xz_valid_read
+    Expression : checker_i.a_hrdata_not_xz_valid_read
+    Type       : assert
+    Location   : ../checker/ahb_checker.sv, 285
+
+    Result     : proven
+    Bound      : Infinite
+    Time       : 0.000 s
+    Engine     : PRE
+
+
+[47]
+    Name       : ahb3liten.checker_i.a_hrdata_not_xz_valid_read:precondition1
+    Expression : checker_i.a_hrdata_not_xz_valid_read_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 285
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.056 s
+    Engine     : Hp
+
+
+[48]
+    Name       : ahb3liten.checker_i.c_hrdata_not_xz
+    Expression : checker_i.c_hrdata_not_xz
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 292
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.056 s
+    Engine     : Hp
+
+
+[49]
+    Name       : ahb3liten.checker_i.c_hrdata_during_error
+    Expression : checker_i.c_hrdata_during_error
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 301
+
+    Result     : unreachable
+    Bound      : Infinite
+    Time       : 0.000 s
+    Engine     : PRE
+
+
+[50]
+    Name       : ahb3liten.checker_i.a_hwdata_valid_after_write
+    Expression : checker_i.a_hwdata_valid_after_write
+    Type       : assert
+    Location   : ../checker/ahb_checker.sv, 307
+
+    Result     : proven
+    Bound      : Infinite
+    Time       : 0.000 s
+    Engine     : PRE
+
+
+[51]
+    Name       : ahb3liten.checker_i.a_hwdata_valid_after_write:precondition1
+    Expression : checker_i.a_hwdata_valid_after_write_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 307
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.063 s
+    Engine     : Hp
+
+
+[52]
+    Name       : ahb3liten.checker_i.c_hwdata_valid
+    Expression : checker_i.c_hwdata_valid
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 312
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.063 s
+    Engine     : Hp
+
+
+[53]
+    Name       : ahb3liten.checker_i.a_hresp_valid
+    Expression : checker_i.a_hresp_valid
+    Type       : assert
+    Location   : ../checker/ahb_checker.sv, 323
+
+    Result     : proven
+    Bound      : Infinite
+    Time       : 0.000 s
+    Engine     : PRE
+
+
+[54]
+    Name       : ahb3liten.checker_i.c_hresp_error_seen
+    Expression : checker_i.c_hresp_error_seen
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 327
+
+    Result     : unreachable
+    Bound      : Infinite
+    Time       : 0.000 s
+    Engine     : PRE
+
+
+[55]
+    Name       : ahb3liten.checker_i.a_hreadyout_no_xz
+    Expression : checker_i.a_hreadyout_no_xz
+    Type       : assert
+    Location   : ../checker/ahb_checker.sv, 333
+
+    Result     : proven
+    Bound      : Infinite
+    Time       : 0.000 s
+    Engine     : PRE
+
+
+[56]
+    Name       : ahb3liten.checker_i.c_hreadyout_low
+    Expression : checker_i.c_hreadyout_low
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 336
+
+    Result     : covered
+    Bound      : 2
+    Time       : 0.007 s
+    Engine     : Ht
+
+
+[57]
+    Name       : ahb3liten.checker_i.a_write_read_correctness
+    Expression : checker_i.a_write_read_correctness
+    Type       : assert
+    Location   : ../checker/ahb_checker.sv, 346
+
+    Result     : cex
+    Bound      : 3
+    Time       : 0.046 s
+    Engine     : Ht
+
+
+[58]
+    Name       : ahb3liten.checker_i.a_write_read_correctness:precondition1
+    Expression : checker_i.a_write_read_correctness_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 346
+
+    Result     : covered
+    Bound      : 2
+    Time       : 0.010 s
+    Engine     : Ht
+
+
+[59]
+    Name       : ahb3liten.checker_i.c_write_then_read
+    Expression : checker_i.c_write_then_read
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 354
+
+    Result     : covered
+    Bound      : 2
+    Time       : 0.010 s
+    Engine     : Ht
+
+
+[60]
+    Name       : ahb3liten.checker_i.a_no_change_without_write
+    Expression : checker_i.a_no_change_without_write
+    Type       : assert
+    Location   : ../checker/ahb_checker.sv, 361
+
+    Result     : cex
+    Bound      : 3
+    Time       : 0.049 s
+    Engine     : Ht
+
+
+[61]
+    Name       : ahb3liten.checker_i.a_no_change_without_write:precondition1
+    Expression : checker_i.a_no_change_without_write_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 361
+
+    Result     : covered
+    Bound      : 2
+    Time       : 0.016 s
+    Engine     : Bm
+
+
+[62]
+    Name       : ahb3liten.checker_i.c_read_no_side_effect
+    Expression : checker_i.c_read_no_side_effect
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 368
+
+    Result     : covered
+    Bound      : 2
+    Time       : 0.016 s
+    Engine     : Bm
+
+
+[63]
+    Name       : ahb3liten.checker_i.a_latest_write_wins
+    Expression : checker_i.a_latest_write_wins
+    Type       : assert
+    Location   : ../checker/ahb_checker.sv, 374
+
+    Result     : cex
+    Bound      : 3
+    Time       : 0.046 s
+    Engine     : Ht
+
+
+[64]
+    Name       : ahb3liten.checker_i.a_latest_write_wins:precondition1
+    Expression : checker_i.a_latest_write_wins_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 374
+
+    Result     : covered
+    Bound      : 2
+    Time       : 0.010 s
+    Engine     : Ht
+
+
+[65]
+    Name       : ahb3liten.checker_i.c_back2back_write
+    Expression : checker_i.c_back2back_write
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 381
+
+    Result     : covered
+    Bound      : 2
+    Time       : 0.010 s
+    Engine     : Ht
+
+
+[66]
+    Name       : ahb3liten.checker_i.a_word_write_atomic
+    Expression : checker_i.a_word_write_atomic
+    Type       : assert
+    Location   : ../checker/ahb_checker.sv, 386
+
+    Result     : cex
+    Bound      : 3
+    Time       : 0.046 s
+    Engine     : Ht
+
+
+[67]
+    Name       : ahb3liten.checker_i.a_word_write_atomic:precondition1
+    Expression : checker_i.a_word_write_atomic_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 386
+
+    Result     : covered
+    Bound      : 2
+    Time       : 0.020 s
+    Engine     : Bm
+
+
+[68]
+    Name       : ahb3liten.checker_i.c_word_write
+    Expression : checker_i.c_word_write
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 394
+
+    Result     : covered
+    Bound      : 2
+    Time       : 0.020 s
+    Engine     : Bm
+
+
+[69]
+    Name       : ahb3liten.checker_i.a_no_mem_change_on_read
+    Expression : checker_i.a_no_mem_change_on_read
+    Type       : assert
+    Location   : ../checker/ahb_checker.sv, 399
+
+    Result     : cex
+    Bound      : 3
+    Time       : 0.049 s
+    Engine     : Ht
+
+
+[70]
+    Name       : ahb3liten.checker_i.a_no_mem_change_on_read:precondition1
+    Expression : checker_i.a_no_mem_change_on_read_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 399
+
+    Result     : covered
+    Bound      : 2
+    Time       : 0.016 s
+    Engine     : Bm
+
+
+[71]
+    Name       : ahb3liten.checker_i.c_read_no_change
+    Expression : checker_i.c_read_no_change
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 406
+
+    Result     : covered
+    Bound      : 2
+    Time       : 0.016 s
+    Engine     : Bm
+
+
+[72]
+    Name       : ahb3liten.checker_i.a_hwdata_ignored_read
+    Expression : checker_i.a_hwdata_ignored_read
+    Type       : assert
+    Location   : ../checker/ahb_checker.sv, 412
+
+    Result     : proven
+    Bound      : Infinite
+    Time       : 0.000 s
+    Engine     : PRE
+
+
+[73]
+    Name       : ahb3liten.checker_i.a_hwdata_ignored_read:precondition1
+    Expression : checker_i.a_hwdata_ignored_read_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 412
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.070 s
+    Engine     : Hp
+
+
+[74]
+    Name       : ahb3liten.checker_i.c_read_hrdata_valid
+    Expression : checker_i.c_read_hrdata_valid
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 417
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.056 s
+    Engine     : Hp
+
+
+[75]
+    Name       : ahb3liten.checker_i.a_byte_write_targeted
+    Expression : checker_i.a_byte_write_targeted
+    Type       : assert
+    Location   : ../checker/ahb_checker.sv, 426
+
+    Result     : cex
+    Bound      : 3
+    Time       : 0.052 s
+    Engine     : Ht
+
+
+[76]
+    Name       : ahb3liten.checker_i.a_byte_write_targeted:precondition1
+    Expression : checker_i.a_byte_write_targeted_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 426
+
+    Result     : covered
+    Bound      : 2
+    Time       : 0.010 s
+    Engine     : Ht
+
+
+[77]
+    Name       : ahb3liten.checker_i.c_byte_write
+    Expression : checker_i.c_byte_write
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 437
+
+    Result     : covered
+    Bound      : 2
+    Time       : 0.010 s
+    Engine     : Ht
+
+
+[78]
+    Name       : ahb3liten.checker_i.a_byte_write_no_corrupt
+    Expression : checker_i.a_byte_write_no_corrupt
+    Type       : assert
+    Location   : ../checker/ahb_checker.sv, 442
+
+    Result     : cex
+    Bound      : 3
+    Time       : 0.060 s
+    Engine     : Ht
+
+
+[79]
+    Name       : ahb3liten.checker_i.a_byte_write_no_corrupt:precondition1
+    Expression : checker_i.a_byte_write_no_corrupt_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 442
+
+    Result     : covered
+    Bound      : 2
+    Time       : 0.010 s
+    Engine     : Ht
+
+
+[80]
+    Name       : ahb3liten.checker_i.c_byte_no_corrupt
+    Expression : checker_i.c_byte_no_corrupt
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 455
+
+    Result     : covered
+    Bound      : 2
+    Time       : 0.010 s
+    Engine     : Ht
+
+
+[81]
+    Name       : ahb3liten.checker_i.a_hword_write_targeted
+    Expression : checker_i.a_hword_write_targeted
+    Type       : assert
+    Location   : ../checker/ahb_checker.sv, 461
+
+    Result     : cex
+    Bound      : 3
+    Time       : 0.066 s
+    Engine     : Ht
+
+
+[82]
+    Name       : ahb3liten.checker_i.a_hword_write_targeted:precondition1
+    Expression : checker_i.a_hword_write_targeted_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 461
+
+    Result     : covered
+    Bound      : 2
+    Time       : 0.025 s
+    Engine     : Bm
+
+
+[83]
+    Name       : ahb3liten.checker_i.c_hword_write
+    Expression : checker_i.c_hword_write
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 470
+
+    Result     : covered
+    Bound      : 2
+    Time       : 0.025 s
+    Engine     : Bm
+
+
+[84]
+    Name       : ahb3liten.checker_i.a_hword_write_no_corrupt
+    Expression : checker_i.a_hword_write_no_corrupt
+    Type       : assert
+    Location   : ../checker/ahb_checker.sv, 475
+
+    Result     : cex
+    Bound      : 3
+    Time       : 0.081 s
+    Engine     : Ht
+
+
+[85]
+    Name       : ahb3liten.checker_i.a_hword_write_no_corrupt:precondition1
+    Expression : checker_i.a_hword_write_no_corrupt_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 475
+
+    Result     : covered
+    Bound      : 2
+    Time       : 0.025 s
+    Engine     : Bm
+
+
+[86]
+    Name       : ahb3liten.checker_i.c_hword_no_corrupt
+    Expression : checker_i.c_hword_no_corrupt
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 484
+
+    Result     : covered
+    Bound      : 2
+    Time       : 0.025 s
+    Engine     : Bm
+
+
+[87]
+    Name       : ahb3liten.checker_i.a_consec_reads_same_data
+    Expression : checker_i.a_consec_reads_same_data
+    Type       : assert
+    Location   : ../checker/ahb_checker.sv, 494
+
+    Result     : cex
+    Bound      : 3
+    Time       : 0.049 s
+    Engine     : Ht
+
+
+[88]
+    Name       : ahb3liten.checker_i.a_consec_reads_same_data:precondition1
+    Expression : checker_i.a_consec_reads_same_data_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 494
+
+    Result     : covered
+    Bound      : 2
+    Time       : 0.016 s
+    Engine     : Bm
+
+
+[89]
+    Name       : ahb3liten.checker_i.c_two_reads_same
+    Expression : checker_i.c_two_reads_same
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 501
+
+    Result     : covered
+    Bound      : 2
+    Time       : 0.016 s
+    Engine     : Bm
+
+
+[90]
+    Name       : ahb3liten.checker_i.a_first_read_after_reset
+    Expression : checker_i.a_first_read_after_reset
+    Type       : assert
+    Location   : ../checker/ahb_checker.sv, 507
+
+    Result     : proven
+    Bound      : Infinite
+    Time       : 0.000 s
+    Engine     : PRE
+
+
+[91]
+    Name       : ahb3liten.checker_i.a_first_read_after_reset:precondition1
+    Expression : checker_i.a_first_read_after_reset_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 507
+
+    Result     : covered
+    Bound      : 2
+    Time       : 0.010 s
+    Engine     : Ht
+
+
+[92]
+    Name       : ahb3liten.checker_i.c_first_read_post_reset
+    Expression : checker_i.c_first_read_post_reset
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 514
+
+    Result     : covered
+    Bound      : 2
+    Time       : 0.010 s
+    Engine     : Ht
+
+
+[93]
+    Name       : ahb3liten.checker_i.a_read_after_write
+    Expression : checker_i.a_read_after_write
+    Type       : assert
+    Location   : ../checker/ahb_checker.sv, 521
+
+    Result     : cex
+    Bound      : 3
+    Time       : 0.052 s
+    Engine     : Ht
+
+
+[94]
+    Name       : ahb3liten.checker_i.a_read_after_write:precondition1
+    Expression : checker_i.a_read_after_write_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 521
+
+    Result     : covered
+    Bound      : 2
+    Time       : 0.010 s
+    Engine     : Ht
+
+
+[95]
+    Name       : ahb3liten.checker_i.c_raw_scenario
+    Expression : checker_i.c_raw_scenario
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 529
+
+    Result     : covered
+    Bound      : 2
+    Time       : 0.010 s
+    Engine     : Ht
+
+
+[96]
+    Name       : ahb3liten.checker_i.a_read_data_not_xz
+    Expression : checker_i.a_read_data_not_xz
+    Type       : assert
+    Location   : ../checker/ahb_checker.sv, 536
+
+    Result     : proven
+    Bound      : Infinite
+    Time       : 0.000 s
+    Engine     : PRE
+
+
+[97]
+    Name       : ahb3liten.checker_i.a_read_data_not_xz:precondition1
+    Expression : checker_i.a_read_data_not_xz_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 536
+
+    Result     : covered
+    Bound      : 2
+    Time       : 0.016 s
+    Engine     : Bm
+
+
+[98]
+    Name       : ahb3liten.checker_i.c_read_not_xz
+    Expression : checker_i.c_read_not_xz
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 541
+
+    Result     : covered
+    Bound      : 2
+    Time       : 0.016 s
+    Engine     : Bm
+
+
+[99]
+    Name       : ahb3liten.checker_i.a_pipeline_write_correct
+    Expression : checker_i.a_pipeline_write_correct
+    Type       : assert
+    Location   : ../checker/ahb_checker.sv, 551
+
+    Result     : proven
+    Bound      : Infinite
+    Time       : 0.000 s
+    Engine     : PRE
+
+
+[100]
+    Name       : ahb3liten.checker_i.a_pipeline_write_correct:precondition1
+    Expression : checker_i.a_pipeline_write_correct_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 551
+
+    Result     : covered
+    Bound      : 2
+    Time       : 0.010 s
+    Engine     : Ht
+
+
+[101]
+    Name       : ahb3liten.checker_i.c_pipeline_write
+    Expression : checker_i.c_pipeline_write
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 557
+
+    Result     : covered
+    Bound      : 2
+    Time       : 0.010 s
+    Engine     : Ht
+
+
+[102]
+    Name       : ahb3liten.checker_i.a_no_data_leakage
+    Expression : checker_i.a_no_data_leakage
+    Type       : assert
+    Location   : ../checker/ahb_checker.sv, 563
+
+    Result     : proven
+    Bound      : Infinite
+    Time       : 0.000 s
+    Engine     : PRE
+
+
+[103]
+    Name       : ahb3liten.checker_i.a_no_data_leakage:precondition1
+    Expression : checker_i.a_no_data_leakage_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 563
+
+    Result     : covered
+    Bound      : 2
+    Time       : 0.029 s
+    Engine     : Bm
+
+
+[104]
+    Name       : ahb3liten.checker_i.c_pipeline_no_leak
+    Expression : checker_i.c_pipeline_no_leak
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 570
+
+    Result     : covered
+    Bound      : 2
+    Time       : 0.029 s
+    Engine     : Bm
+
+
+[105]
+    Name       : ahb3liten.checker_i.a_pipeline_rw_ordering
+    Expression : checker_i.a_pipeline_rw_ordering
+    Type       : assert
+    Location   : ../checker/ahb_checker.sv, 576
+
+    Result     : cex
+    Bound      : 3
+    Time       : 0.046 s
+    Engine     : Ht
+
+
+[106]
+    Name       : ahb3liten.checker_i.a_pipeline_rw_ordering:precondition1
+    Expression : checker_i.a_pipeline_rw_ordering_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 576
+
+    Result     : covered
+    Bound      : 2
+    Time       : 0.010 s
+    Engine     : Ht
+
+
+[107]
+    Name       : ahb3liten.checker_i.c_pipeline_rw
+    Expression : checker_i.c_pipeline_rw
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 583
+
+    Result     : covered
+    Bound      : 2
+    Time       : 0.010 s
+    Engine     : Ht
+
+
+[108]
+    Name       : ahb3liten.checker_i.a_pipeline_addr_data_assoc
+    Expression : checker_i.a_pipeline_addr_data_assoc
+    Type       : assert
+    Location   : ../checker/ahb_checker.sv, 589
+
+    Result     : proven
+    Bound      : Infinite
+    Time       : 0.000 s
+    Engine     : PRE
+
+
+[109]
+    Name       : ahb3liten.checker_i.a_pipeline_addr_data_assoc:precondition1
+    Expression : checker_i.a_pipeline_addr_data_assoc_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 589
+
+    Result     : covered
+    Bound      : 2
+    Time       : 0.010 s
+    Engine     : Ht
+
+
+[110]
+    Name       : ahb3liten.checker_i.c_pipeline_assoc
+    Expression : checker_i.c_pipeline_assoc
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 593
+
+    Result     : covered
+    Bound      : 2
+    Time       : 0.010 s
+    Engine     : Ht
+
+
+[111]
+    Name       : ahb3liten.checker_i.a_out_of_range_error
+    Expression : checker_i.a_out_of_range_error
+    Type       : assert
+    Location   : ../checker/ahb_checker.sv, 602
+
+    Result     : proven
+    Bound      : Infinite
+    Time       : 0.270 s
+    Engine     : Hp
+
+
+[112]
+    Name       : ahb3liten.checker_i.a_out_of_range_error:precondition1
+    Expression : checker_i.a_out_of_range_error_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 602
+
+    Result     : unreachable
+    Bound      : Infinite
+    Time       : 0.035 s
+    Engine     : Hp
+
+
+[113]
+    Name       : ahb3liten.checker_i.c_out_of_range
+    Expression : checker_i.c_out_of_range
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 607
+
+    Result     : unreachable
+    Bound      : Infinite
+    Time       : 0.035 s
+    Engine     : Hp
+
+
+[114]
+    Name       : ahb3liten.checker_i.a_incr_no_mem_boundary_cross
+    Expression : checker_i.a_incr_no_mem_boundary_cross
+    Type       : assert
+    Location   : ../checker/ahb_checker.sv, 615
+
+    Result     : proven
+    Bound      : Infinite
+    Time       : 0.035 s
+    Engine     : Hp
+
+
+[115]
+    Name       : ahb3liten.checker_i.a_incr_no_mem_boundary_cross:precondition1
+    Expression : checker_i.a_incr_no_mem_boundary_cross_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 615
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.071 s
+    Engine     : Hp
+
+
+[116]
+    Name       : ahb3liten.checker_i.c_incr_within_mem
+    Expression : checker_i.c_incr_within_mem
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 622
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.072 s
+    Engine     : Hp
+
+
+[117]
+    Name       : ahb3liten.checker_i.a_hready_high_after_reset
+    Expression : checker_i.a_hready_high_after_reset
+    Type       : assert
+    Location   : ../checker/ahb_checker.sv, 636
+
+    Result     : proven
+    Bound      : Infinite
+    Time       : 0.121 s
+    Engine     : Ht
+
+
+[118]
+    Name       : ahb3liten.checker_i.a_hready_high_after_reset:precondition1
+    Expression : checker_i.a_hready_high_after_reset_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 636
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.051 s
+    Engine     : Hp
+
+
+[119]
+    Name       : ahb3liten.checker_i.c_hready_post_reset
+    Expression : checker_i.c_hready_post_reset
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 641
+
+    Result     : covered
+    Bound      : 2
+    Time       : 0.010 s
+    Engine     : Ht
+
+
+[120]
+    Name       : ahb3liten.checker_i.a_hresp_okay_after_reset
+    Expression : checker_i.a_hresp_okay_after_reset
+    Type       : assert
+    Location   : ../checker/ahb_checker.sv, 647
+
+    Result     : proven
+    Bound      : Infinite
+    Time       : 0.000 s
+    Engine     : PRE
+
+
+[121]
+    Name       : ahb3liten.checker_i.a_hresp_okay_after_reset:precondition1
+    Expression : checker_i.a_hresp_okay_after_reset_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 647
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.051 s
+    Engine     : Hp
+
+
+[122]
+    Name       : ahb3liten.checker_i.c_hresp_post_reset
+    Expression : checker_i.c_hresp_post_reset
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 652
+
+    Result     : covered
+    Bound      : 2
+    Time       : 0.007 s
+    Engine     : Ht
+
+
+[123]
+    Name       : ahb3liten.checker_i.a_reset_aborts_transaction
+    Expression : checker_i.a_reset_aborts_transaction
+    Type       : assert
+    Location   : ../checker/ahb_checker.sv, 658
+
+    Result     : proven
+    Bound      : Infinite
+    Time       : 0.000 s
+    Engine     : PRE
+
+
+[124]
+    Name       : ahb3liten.checker_i.a_reset_aborts_transaction:precondition1
+    Expression : checker_i.a_reset_aborts_transaction_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 658
+
+    Result     : unreachable
+    Bound      : Infinite
+    Time       : 0.000 s
+    Engine     : PRE
+
+
+[125]
+    Name       : ahb3liten.checker_i.c_reset_mid_tx
+    Expression : checker_i.c_reset_mid_tx
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 664
+
+    Result     : unreachable
+    Bound      : Infinite
+    Time       : 0.000 s
+    Engine     : PRE
+
+
+[126]
+    Name       : ahb3liten.checker_i.a_reset_no_mem_corrupt
+    Expression : checker_i.a_reset_no_mem_corrupt
+    Type       : assert
+    Location   : ../checker/ahb_checker.sv, 670
+
+    Result     : proven
+    Bound      : Infinite
+    Time       : 0.000 s
+    Engine     : PRE
+
+
+[127]
+    Name       : ahb3liten.checker_i.a_reset_no_mem_corrupt:precondition1
+    Expression : checker_i.a_reset_no_mem_corrupt_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 670
+
+    Result     : covered
+    Bound      : 2
+    Time       : 0.010 s
+    Engine     : Ht
+
+
+[128]
+    Name       : ahb3liten.checker_i.c_read_post_reset
+    Expression : checker_i.c_read_post_reset
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 677
+
+    Result     : covered
+    Bound      : 2
+    Time       : 0.010 s
+    Engine     : Ht
+
+
+[129]
+    Name       : ahb3liten.checker_i.a_htrans_idle_after_reset
+    Expression : checker_i.a_htrans_idle_after_reset
+    Type       : assert
+    Location   : ../checker/ahb_checker.sv, 684
+
+    Result     : proven
+    Bound      : Infinite
+    Time       : 0.000 s
+    Engine     : PRE
+
+
+[130]
+    Name       : ahb3liten.checker_i.a_htrans_idle_after_reset:precondition1
+    Expression : checker_i.a_htrans_idle_after_reset_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 684
+
+    Result     : unreachable
+    Bound      : Infinite
+    Time       : 0.000 s
+    Engine     : PRE
+
+
+[131]
+    Name       : ahb3liten.checker_i.c_idle_post_reset
+    Expression : checker_i.c_idle_post_reset
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 688
+
+    Result     : covered
+    Bound      : 2
+    Time       : 0.014 s
+    Engine     : Bm
+
+
+[132]
+    Name       : ahb3liten.checker_i.a_hreadyout_reset_default
+    Expression : checker_i.a_hreadyout_reset_default
+    Type       : assert
+    Location   : ../checker/ahb_checker.sv, 694
+
+    Result     : proven
+    Bound      : Infinite
+    Time       : 0.000 s
+    Engine     : PRE
+
+
+[133]
+    Name       : ahb3liten.checker_i.a_hreadyout_reset_default:precondition1
+    Expression : checker_i.a_hreadyout_reset_default_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 694
+
+    Result     : unreachable
+    Bound      : Infinite
+    Time       : 0.000 s
+    Engine     : PRE
+
+
+[134]
+    Name       : ahb3liten.checker_i.c_hreadyout_reset
+    Expression : checker_i.c_hreadyout_reset
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 698
+
+    Result     : covered
+    Bound      : 2
+    Time       : 0.010 s
+    Engine     : Ht
+
+
+[135]
+    Name       : ahb3liten.checker_i.a_hresp_reset_default
+    Expression : checker_i.a_hresp_reset_default
+    Type       : assert
+    Location   : ../checker/ahb_checker.sv, 704
+
+    Result     : proven
+    Bound      : Infinite
+    Time       : 0.000 s
+    Engine     : PRE
+
+
+[136]
+    Name       : ahb3liten.checker_i.a_hresp_reset_default:precondition1
+    Expression : checker_i.a_hresp_reset_default_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 704
+
+    Result     : unreachable
+    Bound      : Infinite
+    Time       : 0.000 s
+    Engine     : PRE
+
+
+[137]
+    Name       : ahb3liten.checker_i.c_hresp_reset
+    Expression : checker_i.c_hresp_reset
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 708
+
+    Result     : covered
+    Bound      : 2
+    Time       : 0.007 s
+    Engine     : Ht
+
+
+[138]
+    Name       : ahb3liten.checker_i.a_wrap4_no_error
+    Expression : checker_i.a_wrap4_no_error
+    Type       : assert
+    Location   : ../checker/ahb_checker.sv, 718
+
+    Result     : proven
+    Bound      : Infinite
+    Time       : 0.000 s
+    Engine     : PRE
+
+
+[139]
+    Name       : ahb3liten.checker_i.a_wrap4_no_error:precondition1
+    Expression : checker_i.a_wrap4_no_error_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 718
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.074 s
+    Engine     : Hp
+
+
+[140]
+    Name       : ahb3liten.checker_i.a_wrap4_addr_in_region
+    Expression : checker_i.a_wrap4_addr_in_region
+    Type       : assert
+    Location   : ../checker/ahb_checker.sv, 725
+
+    Result     : cex
+    Bound      : 1
+    Time       : 0.075 s
+    Engine     : Hp
+
+
+[141]
+    Name       : ahb3liten.checker_i.a_wrap4_addr_in_region:precondition1
+    Expression : checker_i.a_wrap4_addr_in_region_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 725
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.075 s
+    Engine     : Hp
+
+
+[142]
+    Name       : ahb3liten.checker_i.a_wrap8_addr_in_region
+    Expression : checker_i.a_wrap8_addr_in_region
+    Type       : assert
+    Location   : ../checker/ahb_checker.sv, 732
+
+    Result     : cex
+    Bound      : 1
+    Time       : 0.083 s
+    Engine     : Hp
+
+
+[143]
+    Name       : ahb3liten.checker_i.a_wrap8_addr_in_region:precondition1
+    Expression : checker_i.a_wrap8_addr_in_region_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 732
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.083 s
+    Engine     : Hp
+
+
+[144]
+    Name       : ahb3liten.checker_i.a_wrap16_addr_in_region
+    Expression : checker_i.a_wrap16_addr_in_region
+    Type       : assert
+    Location   : ../checker/ahb_checker.sv, 739
+
+    Result     : cex
+    Bound      : 1
+    Time       : 0.086 s
+    Engine     : Hp
+
+
+[145]
+    Name       : ahb3liten.checker_i.a_wrap16_addr_in_region:precondition1
+    Expression : checker_i.a_wrap16_addr_in_region_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_checker.sv, 739
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.086 s
+    Engine     : Hp
+
+
+[146]
+    Name       : ahb3liten.assumptions_i.am_htrans_valid
+    Expression : assumptions_i.am_htrans_valid
+    Type       : assume
+    Location   : ../checker/ahb_assumptions.sv, 64
+
+    Status     : temporary
+[147]
+    Name       : ahb3liten.assumptions_i.am_seq_after_nonseq_or_seq
+    Expression : assumptions_i.am_seq_after_nonseq_or_seq
+    Type       : assume
+    Location   : ../checker/ahb_assumptions.sv, 71
+
+    Status     : temporary
+[148]
+    Name       : ahb3liten.assumptions_i.am_seq_after_nonseq_or_seq:precondition1
+    Expression : assumptions_i.am_seq_after_nonseq_or_seq_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_assumptions.sv, 71
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.071 s
+    Engine     : Hp
+
+
+[149]
+    Name       : ahb3liten.assumptions_i.am_no_busy_in_single
+    Expression : assumptions_i.am_no_busy_in_single
+    Type       : assume
+    Location   : ../checker/ahb_assumptions.sv, 79
+
+    Status     : temporary
+[150]
+    Name       : ahb3liten.assumptions_i.am_no_busy_in_single:precondition1
+    Expression : assumptions_i.am_no_busy_in_single_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_assumptions.sv, 79
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.093 s
+    Engine     : Hp
+
+
+[151]
+    Name       : ahb3liten.assumptions_i.am_busy_only_in_active_burst
+    Expression : assumptions_i.am_busy_only_in_active_burst
+    Type       : assume
+    Location   : ../checker/ahb_assumptions.sv, 86
+
+    Status     : temporary
+[152]
+    Name       : ahb3liten.assumptions_i.am_busy_only_in_active_burst:precondition1
+    Expression : assumptions_i.am_busy_only_in_active_burst_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_assumptions.sv, 86
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.056 s
+    Engine     : Hp
+
+
+[153]
+    Name       : ahb3liten.assumptions_i.am_busy_last_only_in_incr
+    Expression : assumptions_i.am_busy_last_only_in_incr
+    Type       : assume
+    Location   : ../checker/ahb_assumptions.sv, 94
+
+    Status     : temporary
+[154]
+    Name       : ahb3liten.assumptions_i.am_busy_last_only_in_incr:precondition1
+    Expression : assumptions_i.am_busy_last_only_in_incr_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_assumptions.sv, 94
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.056 s
+    Engine     : Hp
+
+
+[155]
+    Name       : ahb3liten.assumptions_i.am_burst_starts_nonseq
+    Expression : assumptions_i.am_burst_starts_nonseq
+    Type       : assume
+    Location   : ../checker/ahb_assumptions.sv, 103
+
+    Status     : temporary
+[156]
+    Name       : ahb3liten.assumptions_i.am_burst_starts_nonseq:precondition1
+    Expression : assumptions_i.am_burst_starts_nonseq_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_assumptions.sv, 103
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.095 s
+    Engine     : Hp
+
+
+[157]
+    Name       : ahb3liten.assumptions_i.am_single_followed_by_idle_nonseq
+    Expression : assumptions_i.am_single_followed_by_idle_nonseq
+    Type       : assume
+    Location   : ../checker/ahb_assumptions.sv, 113
+
+    Status     : temporary
+[158]
+    Name       : ahb3liten.assumptions_i.am_single_followed_by_idle_nonseq:precondition1
+    Expression : assumptions_i.am_single_followed_by_idle_nonseq_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_assumptions.sv, 113
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.096 s
+    Engine     : Hp
+
+
+[159]
+    Name       : ahb3liten.assumptions_i.am_incr_valid_continuation
+    Expression : assumptions_i.am_incr_valid_continuation
+    Type       : assume
+    Location   : ../checker/ahb_assumptions.sv, 121
+
+    Status     : temporary
+[160]
+    Name       : ahb3liten.assumptions_i.am_incr_valid_continuation:precondition1
+    Expression : assumptions_i.am_incr_valid_continuation_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_assumptions.sv, 121
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.102 s
+    Engine     : Hp
+
+
+[161]
+    Name       : ahb3liten.assumptions_i.am_htrans_stable_wait
+    Expression : assumptions_i.am_htrans_stable_wait
+    Type       : assume
+    Location   : ../checker/ahb_assumptions.sv, 130
+
+    Status     : temporary
+[162]
+    Name       : ahb3liten.assumptions_i.am_htrans_stable_wait:precondition1
+    Expression : assumptions_i.am_htrans_stable_wait_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_assumptions.sv, 130
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.103 s
+    Engine     : Hp
+
+
+[163]
+    Name       : ahb3liten.assumptions_i.am_master_idle_after_error
+    Expression : assumptions_i.am_master_idle_after_error
+    Type       : assume
+    Location   : ../checker/ahb_assumptions.sv, 136
+
+    Status     : temporary
+[164]
+    Name       : ahb3liten.assumptions_i.am_master_idle_after_error:precondition1
+    Expression : assumptions_i.am_master_idle_after_error_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_assumptions.sv, 136
+
+    Result     : unreachable
+    Bound      : Infinite
+    Time       : 0.000 s
+    Engine     : PRE
+
+
+[165]
+    Name       : ahb3liten.assumptions_i.am_haddr_aligned
+    Expression : assumptions_i.am_haddr_aligned
+    Type       : assume
+    Location   : ../checker/ahb_assumptions.sv, 147
+
+    Status     : temporary
+[166]
+    Name       : ahb3liten.assumptions_i.am_haddr_aligned:precondition1
+    Expression : assumptions_i.am_haddr_aligned_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_assumptions.sv, 147
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.070 s
+    Engine     : Hp
+
+
+[167]
+    Name       : ahb3liten.assumptions_i.am_haddr_stable_wait
+    Expression : assumptions_i.am_haddr_stable_wait
+    Type       : assume
+    Location   : ../checker/ahb_assumptions.sv, 156
+
+    Status     : temporary
+[168]
+    Name       : ahb3liten.assumptions_i.am_haddr_stable_wait:precondition1
+    Expression : assumptions_i.am_haddr_stable_wait_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_assumptions.sv, 156
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.103 s
+    Engine     : Hp
+
+
+[169]
+    Name       : ahb3liten.assumptions_i.am_incr_no_1kb_cross
+    Expression : assumptions_i.am_incr_no_1kb_cross
+    Type       : assume
+    Location   : ../checker/ahb_assumptions.sv, 164
+
+    Status     : temporary
+[170]
+    Name       : ahb3liten.assumptions_i.am_incr_no_1kb_cross:precondition1
+    Expression : assumptions_i.am_incr_no_1kb_cross_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_assumptions.sv, 164
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.071 s
+    Engine     : Hp
+
+
+[171]
+    Name       : ahb3liten.assumptions_i.am_haddr_in_range
+    Expression : assumptions_i.am_haddr_in_range
+    Type       : assume
+    Location   : ../checker/ahb_assumptions.sv, 173
+
+    Status     : temporary
+[172]
+    Name       : ahb3liten.assumptions_i.am_haddr_in_range:precondition1
+    Expression : assumptions_i.am_haddr_in_range_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_assumptions.sv, 173
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.070 s
+    Engine     : Hp
+
+
+[173]
+    Name       : ahb3liten.assumptions_i.am_busy_addr_reflects_next
+    Expression : assumptions_i.am_busy_addr_reflects_next
+    Type       : assume
+    Location   : ../checker/ahb_assumptions.sv, 181
+
+    Status     : temporary
+[174]
+    Name       : ahb3liten.assumptions_i.am_busy_addr_reflects_next:precondition1
+    Expression : assumptions_i.am_busy_addr_reflects_next_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_assumptions.sv, 181
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.056 s
+    Engine     : Hp
+
+
+[175]
+    Name       : ahb3liten.assumptions_i.am_seq_addr_increment
+    Expression : assumptions_i.am_seq_addr_increment
+    Type       : assume
+    Location   : ../checker/ahb_assumptions.sv, 191
+
+    Status     : temporary
+[176]
+    Name       : ahb3liten.assumptions_i.am_seq_addr_increment:precondition1
+    Expression : assumptions_i.am_seq_addr_increment_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_assumptions.sv, 191
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.104 s
+    Engine     : Hp
+
+
+[177]
+    Name       : ahb3liten.assumptions_i.am_hburst_constant_burst
+    Expression : assumptions_i.am_hburst_constant_burst
+    Type       : assume
+    Location   : ../checker/ahb_assumptions.sv, 205
+
+    Status     : temporary
+[178]
+    Name       : ahb3liten.assumptions_i.am_hburst_constant_burst:precondition1
+    Expression : assumptions_i.am_hburst_constant_burst_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_assumptions.sv, 205
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.056 s
+    Engine     : Hp
+
+
+[179]
+    Name       : ahb3liten.assumptions_i.am_hburst_stable_wait
+    Expression : assumptions_i.am_hburst_stable_wait
+    Type       : assume
+    Location   : ../checker/ahb_assumptions.sv, 211
+
+    Status     : temporary
+[180]
+    Name       : ahb3liten.assumptions_i.am_hburst_stable_wait:precondition1
+    Expression : assumptions_i.am_hburst_stable_wait_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_assumptions.sv, 211
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.103 s
+    Engine     : Hp
+
+
+[181]
+    Name       : ahb3liten.assumptions_i.am_hsize_constant_burst
+    Expression : assumptions_i.am_hsize_constant_burst
+    Type       : assume
+    Location   : ../checker/ahb_assumptions.sv, 218
+
+    Status     : temporary
+[182]
+    Name       : ahb3liten.assumptions_i.am_hsize_constant_burst:precondition1
+    Expression : assumptions_i.am_hsize_constant_burst_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_assumptions.sv, 218
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.056 s
+    Engine     : Hp
+
+
+[183]
+    Name       : ahb3liten.assumptions_i.am_hsize_stable_wait
+    Expression : assumptions_i.am_hsize_stable_wait
+    Type       : assume
+    Location   : ../checker/ahb_assumptions.sv, 225
+
+    Status     : temporary
+[184]
+    Name       : ahb3liten.assumptions_i.am_hsize_stable_wait:precondition1
+    Expression : assumptions_i.am_hsize_stable_wait_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_assumptions.sv, 225
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.103 s
+    Engine     : Hp
+
+
+[185]
+    Name       : ahb3liten.assumptions_i.am_hsize_valid_32bit
+    Expression : assumptions_i.am_hsize_valid_32bit
+    Type       : assume
+    Location   : ../checker/ahb_assumptions.sv, 232
+
+    Status     : temporary
+[186]
+    Name       : ahb3liten.assumptions_i.am_hsize_valid_32bit:precondition1
+    Expression : assumptions_i.am_hsize_valid_32bit_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_assumptions.sv, 232
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.070 s
+    Engine     : Hp
+
+
+[187]
+    Name       : ahb3liten.assumptions_i.am_hwrite_stable_wait
+    Expression : assumptions_i.am_hwrite_stable_wait
+    Type       : assume
+    Location   : ../checker/ahb_assumptions.sv, 239
+
+    Status     : temporary
+[188]
+    Name       : ahb3liten.assumptions_i.am_hwrite_stable_wait:precondition1
+    Expression : assumptions_i.am_hwrite_stable_wait_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_assumptions.sv, 239
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.103 s
+    Engine     : Hp
+
+
+[189]
+    Name       : ahb3liten.assumptions_i.am_seq_control_stable
+    Expression : assumptions_i.am_seq_control_stable
+    Type       : assume
+    Location   : ../checker/ahb_assumptions.sv, 246
+
+    Status     : temporary
+[190]
+    Name       : ahb3liten.assumptions_i.am_seq_control_stable:precondition1
+    Expression : assumptions_i.am_seq_control_stable_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_assumptions.sv, 246
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.071 s
+    Engine     : Hp
+
+
+[191]
+    Name       : ahb3liten.assumptions_i.am_hwdata_stable_until_hready
+    Expression : assumptions_i.am_hwdata_stable_until_hready
+    Type       : assume
+    Location   : ../checker/ahb_assumptions.sv, 260
+
+    Status     : temporary
+[192]
+    Name       : ahb3liten.assumptions_i.am_hwdata_stable_until_hready:precondition1
+    Expression : assumptions_i.am_hwdata_stable_until_hready_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_assumptions.sv, 260
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.104 s
+    Engine     : Hp
+
+
+[193]
+    Name       : ahb3liten.assumptions_i.am_hwdata_not_xz
+    Expression : assumptions_i.am_hwdata_not_xz
+    Type       : assume
+    Location   : ../checker/ahb_assumptions.sv, 269
+
+    Status     : temporary
+[194]
+    Name       : ahb3liten.assumptions_i.am_hwdata_not_xz:precondition1
+    Expression : assumptions_i.am_hwdata_not_xz_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_assumptions.sv, 269
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.063 s
+    Engine     : Hp
+
+
+[195]
+    Name       : ahb3liten.assumptions_i.am_haddr_no_xz
+    Expression : assumptions_i.am_haddr_no_xz
+    Type       : assume
+    Location   : ../checker/ahb_assumptions.sv, 281
+
+    Status     : temporary
+[196]
+    Name       : ahb3liten.assumptions_i.am_haddr_no_xz:precondition1
+    Expression : assumptions_i.am_haddr_no_xz_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_assumptions.sv, 281
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.070 s
+    Engine     : Hp
+
+
+[197]
+    Name       : ahb3liten.assumptions_i.am_htrans_no_xz
+    Expression : assumptions_i.am_htrans_no_xz
+    Type       : assume
+    Location   : ../checker/ahb_assumptions.sv, 287
+
+    Status     : temporary
+[198]
+    Name       : ahb3liten.assumptions_i.am_htrans_no_xz:precondition1
+    Expression : assumptions_i.am_htrans_no_xz_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_assumptions.sv, 287
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.051 s
+    Engine     : Hp
+
+
+[199]
+    Name       : ahb3liten.assumptions_i.am_hwrite_no_xz
+    Expression : assumptions_i.am_hwrite_no_xz
+    Type       : assume
+    Location   : ../checker/ahb_assumptions.sv, 292
+
+    Status     : temporary
+[200]
+    Name       : ahb3liten.assumptions_i.am_hwrite_no_xz:precondition1
+    Expression : assumptions_i.am_hwrite_no_xz_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_assumptions.sv, 292
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.070 s
+    Engine     : Hp
+
+
+[201]
+    Name       : ahb3liten.assumptions_i.am_hburst_no_xz
+    Expression : assumptions_i.am_hburst_no_xz
+    Type       : assume
+    Location   : ../checker/ahb_assumptions.sv, 298
+
+    Status     : temporary
+[202]
+    Name       : ahb3liten.assumptions_i.am_hburst_no_xz:precondition1
+    Expression : assumptions_i.am_hburst_no_xz_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_assumptions.sv, 298
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.070 s
+    Engine     : Hp
+
+
+[203]
+    Name       : ahb3liten.assumptions_i.am_hsize_no_xz
+    Expression : assumptions_i.am_hsize_no_xz
+    Type       : assume
+    Location   : ../checker/ahb_assumptions.sv, 304
+
+    Status     : temporary
+[204]
+    Name       : ahb3liten.assumptions_i.am_hsize_no_xz:precondition1
+    Expression : assumptions_i.am_hsize_no_xz_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_assumptions.sv, 304
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.070 s
+    Engine     : Hp
+
+
+[205]
+    Name       : ahb3liten.assumptions_i.am_hsel_no_xz
+    Expression : assumptions_i.am_hsel_no_xz
+    Type       : assume
+    Location   : ../checker/ahb_assumptions.sv, 310
+
+    Status     : temporary
+[206]
+    Name       : ahb3liten.assumptions_i.am_htrans_idle_after_reset
+    Expression : assumptions_i.am_htrans_idle_after_reset
+    Type       : assume
+    Location   : ../checker/ahb_assumptions.sv, 320
+
+    Status     : temporary
+[207]
+    Name       : ahb3liten.assumptions_i.am_htrans_idle_after_reset:precondition1
+    Expression : assumptions_i.am_htrans_idle_after_reset_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_assumptions.sv, 320
+
+    Result     : unreachable
+    Bound      : Infinite
+    Time       : 0.000 s
+    Engine     : PRE
+
+
+[208]
+    Name       : ahb3liten.assumptions_i.am_no_transfer_during_reset
+    Expression : assumptions_i.am_no_transfer_during_reset
+    Type       : assume
+    Location   : ../checker/ahb_assumptions.sv, 327
+
+    Status     : temporary
+[209]
+    Name       : ahb3liten.assumptions_i.am_no_transfer_during_reset:precondition1
+    Expression : assumptions_i.am_no_transfer_during_reset_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_assumptions.sv, 327
+
+    Result     : unreachable
+    Bound      : Infinite
+    Time       : 0.000 s
+    Engine     : PRE
+
+
+[210]
+    Name       : ahb3liten.assumptions_i.am_hsel_deasserted_reset
+    Expression : assumptions_i.am_hsel_deasserted_reset
+    Type       : assume
+    Location   : ../checker/ahb_assumptions.sv, 335
+
+    Status     : temporary
+[211]
+    Name       : ahb3liten.assumptions_i.am_hsel_deasserted_reset:precondition1
+    Expression : assumptions_i.am_hsel_deasserted_reset_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_assumptions.sv, 335
+
+    Result     : unreachable
+    Bound      : Infinite
+    Time       : 0.000 s
+    Engine     : PRE
+
+
+[212]
+    Name       : ahb3liten.assumptions_i.am_wrap4_no_region_cross_byte
+    Expression : assumptions_i.am_wrap4_no_region_cross_byte
+    Type       : assume
+    Location   : ../checker/ahb_assumptions.sv, 342
+
+    Status     : temporary
+[213]
+    Name       : ahb3liten.assumptions_i.am_wrap4_no_region_cross_byte:precondition1
+    Expression : assumptions_i.am_wrap4_no_region_cross_byte_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_assumptions.sv, 342
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.107 s
+    Engine     : Hp
+
+
+[214]
+    Name       : ahb3liten.assumptions_i.am_wrap4_no_region_cross_hword
+    Expression : assumptions_i.am_wrap4_no_region_cross_hword
+    Type       : assume
+    Location   : ../checker/ahb_assumptions.sv, 348
+
+    Status     : temporary
+[215]
+    Name       : ahb3liten.assumptions_i.am_wrap4_no_region_cross_hword:precondition1
+    Expression : assumptions_i.am_wrap4_no_region_cross_hword_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_assumptions.sv, 348
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.074 s
+    Engine     : Hp
+
+
+[216]
+    Name       : ahb3liten.assumptions_i.am_wrap4_no_region_cross_word
+    Expression : assumptions_i.am_wrap4_no_region_cross_word
+    Type       : assume
+    Location   : ../checker/ahb_assumptions.sv, 354
+
+    Status     : temporary
+[217]
+    Name       : ahb3liten.assumptions_i.am_wrap4_no_region_cross_word:precondition1
+    Expression : assumptions_i.am_wrap4_no_region_cross_word_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_assumptions.sv, 354
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.116 s
+    Engine     : Hp
+
+
+[218]
+    Name       : ahb3liten.assumptions_i.am_wrap8_no_region_cross_byte
+    Expression : assumptions_i.am_wrap8_no_region_cross_byte
+    Type       : assume
+    Location   : ../checker/ahb_assumptions.sv, 362
+
+    Status     : temporary
+[219]
+    Name       : ahb3liten.assumptions_i.am_wrap8_no_region_cross_byte:precondition1
+    Expression : assumptions_i.am_wrap8_no_region_cross_byte_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_assumptions.sv, 362
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.118 s
+    Engine     : Hp
+
+
+[220]
+    Name       : ahb3liten.assumptions_i.am_wrap8_no_region_cross_hword
+    Expression : assumptions_i.am_wrap8_no_region_cross_hword
+    Type       : assume
+    Location   : ../checker/ahb_assumptions.sv, 368
+
+    Status     : temporary
+[221]
+    Name       : ahb3liten.assumptions_i.am_wrap8_no_region_cross_hword:precondition1
+    Expression : assumptions_i.am_wrap8_no_region_cross_hword_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_assumptions.sv, 368
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.070 s
+    Engine     : Hp
+
+
+[222]
+    Name       : ahb3liten.assumptions_i.am_wrap8_no_region_cross_word
+    Expression : assumptions_i.am_wrap8_no_region_cross_word
+    Type       : assume
+    Location   : ../checker/ahb_assumptions.sv, 374
+
+    Status     : temporary
+[223]
+    Name       : ahb3liten.assumptions_i.am_wrap8_no_region_cross_word:precondition1
+    Expression : assumptions_i.am_wrap8_no_region_cross_word_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_assumptions.sv, 374
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.120 s
+    Engine     : Hp
+
+
+[224]
+    Name       : ahb3liten.assumptions_i.am_wrap16_no_region_cross_byte
+    Expression : assumptions_i.am_wrap16_no_region_cross_byte
+    Type       : assume
+    Location   : ../checker/ahb_assumptions.sv, 382
+
+    Status     : temporary
+[225]
+    Name       : ahb3liten.assumptions_i.am_wrap16_no_region_cross_byte:precondition1
+    Expression : assumptions_i.am_wrap16_no_region_cross_byte_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_assumptions.sv, 382
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.124 s
+    Engine     : Hp
+
+
+[226]
+    Name       : ahb3liten.assumptions_i.am_wrap16_no_region_cross_hword
+    Expression : assumptions_i.am_wrap16_no_region_cross_hword
+    Type       : assume
+    Location   : ../checker/ahb_assumptions.sv, 388
+
+    Status     : temporary
+[227]
+    Name       : ahb3liten.assumptions_i.am_wrap16_no_region_cross_hword:precondition1
+    Expression : assumptions_i.am_wrap16_no_region_cross_hword_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_assumptions.sv, 388
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.086 s
+    Engine     : Hp
+
+
+[228]
+    Name       : ahb3liten.assumptions_i.am_wrap16_no_region_cross_word
+    Expression : assumptions_i.am_wrap16_no_region_cross_word
+    Type       : assume
+    Location   : ../checker/ahb_assumptions.sv, 394
+
+    Status     : temporary
+[229]
+    Name       : ahb3liten.assumptions_i.am_wrap16_no_region_cross_word:precondition1
+    Expression : assumptions_i.am_wrap16_no_region_cross_word_precondition1
+    Type       : cover
+    Location   : ../checker/ahb_assumptions.sv, 394
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.126 s
+    Engine     : Hp
+
+
+[230]
+    Name       : ahb3liten.cover_i.cov_hready_low_3cycles
+    Expression : cover_i.cov_hready_low_3cycles
+    Type       : cover
+    Location   : ../checker/ahb_cover.sv, 63
+
+    Result     : unreachable
+    Bound      : Infinite
+    Time       : 0.280 s
+    Engine     : Hp
+
+
+[231]
+    Name       : ahb3liten.cover_i.cov_wrap4_actual_wrap
+    Expression : cover_i.cov_wrap4_actual_wrap
+    Type       : cover
+    Location   : ../checker/ahb_cover.sv, 73
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.135 s
+    Engine     : Hp
+
+
+[232]
+    Name       : ahb3liten.cover_i.cov_write_then_read_same_addr
+    Expression : cover_i.cov_write_then_read_same_addr
+    Type       : cover
+    Location   : ../checker/ahb_cover.sv, 83
+
+    Result     : covered
+    Bound      : 2
+    Time       : 0.010 s
+    Engine     : Ht
+
+
+[233]
+    Name       : ahb3liten.cover_i.cov_hresp_error
+    Expression : cover_i.cov_hresp_error
+    Type       : cover
+    Location   : ../checker/ahb_cover.sv, 93
+
+    Result     : unreachable
+    Bound      : Infinite
+    Time       : 0.000 s
+    Engine     : PRE
+
+
+[234]
+    Name       : ahb3liten.cover_i.cov_back2back_nonseq
+    Expression : cover_i.cov_back2back_nonseq
+    Type       : cover
+    Location   : ../checker/ahb_cover.sv, 102
+
+    Result     : covered
+    Bound      : 2
+    Time       : 0.010 s
+    Engine     : Ht
+
+
+[235]
+    Name       : ahb3liten.cover_i.cov_busy_in_incr_burst
+    Expression : cover_i.cov_busy_in_incr_burst
+    Type       : cover
+    Location   : ../checker/ahb_cover.sv, 113
+
+    Result     : covered
+    Bound      : 4
+    Time       : 0.106 s
+    Engine     : Ht
+
+
+[236]
+    Name       : ahb3liten.cover_i.cov_byte_write_lane0
+    Expression : cover_i.cov_byte_write_lane0
+    Type       : cover
+    Location   : ../checker/ahb_cover.sv, 122
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.137 s
+    Engine     : Hp
+
+
+[237]
+    Name       : ahb3liten.cover_i.cov_byte_write_lane1
+    Expression : cover_i.cov_byte_write_lane1
+    Type       : cover
+    Location   : ../checker/ahb_cover.sv, 128
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.139 s
+    Engine     : Hp
+
+
+[238]
+    Name       : ahb3liten.cover_i.cov_byte_write_lane2
+    Expression : cover_i.cov_byte_write_lane2
+    Type       : cover
+    Location   : ../checker/ahb_cover.sv, 134
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.140 s
+    Engine     : Hp
+
+
+[239]
+    Name       : ahb3liten.cover_i.cov_byte_write_lane3
+    Expression : cover_i.cov_byte_write_lane3
+    Type       : cover
+    Location   : ../checker/ahb_cover.sv, 140
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.141 s
+    Engine     : Hp
+
+
+[240]
+    Name       : ahb3liten.cover_i.cov_hword_write_low
+    Expression : cover_i.cov_hword_write_low
+    Type       : cover
+    Location   : ../checker/ahb_cover.sv, 147
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.147 s
+    Engine     : Hp
+
+
+[241]
+    Name       : ahb3liten.cover_i.cov_hword_write_high
+    Expression : cover_i.cov_hword_write_high
+    Type       : cover
+    Location   : ../checker/ahb_cover.sv, 153
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.151 s
+    Engine     : Hp
+
+
+[242]
+    Name       : ahb3liten.cover_i.cov_reset_mid_transaction
+    Expression : cover_i.cov_reset_mid_transaction
+    Type       : cover
+    Location   : ../checker/ahb_cover.sv, 161
+
+    Result     : unreachable
+    Bound      : Infinite
+    Time       : 0.000 s
+    Engine     : PRE
+
+
+[243]
+    Name       : ahb3liten.cover_i.cov_incr4_write_burst
+    Expression : cover_i.cov_incr4_write_burst
+    Type       : cover
+    Location   : ../checker/ahb_cover.sv, 169
+
+    Result     : covered
+    Bound      : 5
+    Time       : 0.114 s
+    Engine     : Ht
+
+
+[244]
+    Name       : ahb3liten.cover_i.cov_wrap4_full_burst
+    Expression : cover_i.cov_wrap4_full_burst
+    Type       : cover
+    Location   : ../checker/ahb_cover.sv, 179
+
+    Result     : covered
+    Bound      : 5
+    Time       : 0.120 s
+    Engine     : Ht
+
+
+[245]
+    Name       : ahb3liten.cover_i.cov_back2back_writes_same_addr
+    Expression : cover_i.cov_back2back_writes_same_addr
+    Type       : cover
+    Location   : ../checker/ahb_cover.sv, 190
+
+    Result     : covered
+    Bound      : 2
+    Time       : 0.032 s
+    Engine     : Ht
+
+
+[246]
+    Name       : ahb3liten.cover_i.cov_first_read_after_reset
+    Expression : cover_i.cov_first_read_after_reset
+    Type       : cover
+    Location   : ../checker/ahb_cover.sv, 201
+
+    Result     : covered
+    Bound      : 2
+    Time       : 0.010 s
+    Engine     : Ht
+
+
+[247]
+    Name       : ahb3liten.cover_i.cov_wait_state_in_burst
+    Expression : cover_i.cov_wait_state_in_burst
+    Type       : cover
+    Location   : ../checker/ahb_cover.sv, 211
+
+    Result     : covered
+    Bound      : 3
+    Time       : 0.097 s
+    Engine     : Ht
+
+
+[248]
+    Name       : ahb3liten.cover_i.cov_wrap8_actual_wrap
+    Expression : cover_i.cov_wrap8_actual_wrap
+    Type       : cover
+    Location   : ../checker/ahb_cover.sv, 219
+
+    Result     : covered
+    Bound      : 1
+    Time       : 0.153 s
+    Engine     : Hp
+
+
+[249]
+    Name       : ahb3liten.cover_i.cov_byte_write_then_read
+    Expression : cover_i.cov_byte_write_then_read
+    Type       : cover
+    Location   : ../checker/ahb_cover.sv, 228
+
+    Result     : covered
+    Bound      : 2
+    Time       : 0.010 s
+    Engine     : Ht
+
+
+[250]
+    Name       : ahb3liten.cover_i.cov_word_write_byte_read
+    Expression : cover_i.cov_word_write_byte_read
+    Type       : cover
+    Location   : ../checker/ahb_cover.sv, 238
+
+    Result     : covered
+    Bound      : 2
+    Time       : 0.034 s
+    Engine     : Bm
+
+
+-------------------------------------------------------------------------------

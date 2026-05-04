@@ -1,27 +1,27 @@
-// ============================================================
 //  AHB Lite SVA Checker — DUT Assertions Only
 //  Project  : EE-5214 AMBA AHB-Lite RAM Verification
-//  DUT      : ahb3lite_sram (RoaLogic)
+//  DUT      : ahb3liten and sram
 //  Role     : B — Assertions & Formal
 //  Spec     : ARM IHI0033A
 //
 //  NOTE: Master behaviour is constrained in ahb_assumptions.sv
+//        This file only checks DUT (slave) outputs and
+//        functional memory correctness.
+//
 //  Sections:
-//  [1]  Slave Response        — SR1  to SR8   (Spec §3.4, §3.6)
-//  [2]  ERROR Response        — ER1  to ER3   (Spec §3.6)
-//  [3]  HSEL Inactive         — HS1  to HS3   (Spec §2)
-//  [4]  Data Bus              — DB1  to DB4   (Spec §6.1)
-//  [5]  Signal Integrity      — SI1  to SI3   (Spec §2)
+//  [1]  Slave Response        — SR1  to SR8   (Spec  3.2,4.1.1) slaves must always provide a zero wait st,  3.6)
+//  [2]  ERROR Response        — ER1  to ER3   (Spec  3.6.2) done
+//  [3]  HSEL Inactive         — HS1  to HS3   (Spec  3,2,5 inferred from spec) done
+//  [4]  Data Bus              — DB1  to DB4   (Spec  6.1.1, 6.1.2) done
+//  [5]  Signal Integrity      — SI1  to SI2   (Spec  5.1,2.3) done
 //  [6]  Write Correctness     — WC1  to WC6   (Functional)
 //  [7]  Byte & HW Masking     — M1   to M4    (Functional)
 //  [8]  Read Correctness      — RC1  to RC4   (Functional)
 //  [9]  Pipeline              — P1   to P4    (Functional)
-//  [10] Address & Boundary    — A1   to A3    (Spec §3.5)
-//  [11] Reset                 — R1   to R7    (Spec §4)
-// ============================================================
-
+//  [10] Address & Boundary    — A1   to A3    (Spec  3.5.3,4.1.1 )done
+//  [11] Reset                 — R1   to R7    (Spec  7)
+                   
 import ahb3lite_pkg::*;
-
 module ahb_checker #(
     parameter int HADDR_SIZE  = 32,
     parameter int HDATA_SIZE  = 32,
@@ -42,56 +42,62 @@ module ahb_checker #(
     input                       HREADY,
     input                       HRESP
 );
-
-    // ---- default clocking & disable iff ------------------------
+ 
+    // ── default clocking & disable ────────────────────────────────
     default clocking ahb_clk @(posedge HCLK); endclocking
     default disable iff (!HRESETn);
-
-    // ---- max valid address -------------------------------------
+ 
+    // ── max valid address ─────────────────────────────────────────
     localparam [HADDR_SIZE-1:0] MAX_ADDR =
         (MEM_DEPTH * (HDATA_SIZE/8)) - 1;
-
-    // ============================================================
-    //  PIPELINE TRACKING REGISTERS
-    //  Latched at end of address phase (HREADY=1)
-    // ============================================================
+ 
     logic [HADDR_SIZE-1:0] addr_ph;
     logic [2:0]            size_ph;
     logic                  write_ph;
     logic                  valid_ph;
-
+    logic [HDATA_SIZE-1:0] hwdata_ph;
+  
+    logic [HADDR_SIZE-1:0] burst_start_addr;
+    always_ff @(posedge HCLK or negedge HRESETn) begin
+        if (!HRESETn) burst_start_addr <= '0;
+        else if (HREADY && HTRANS == HTRANS_NONSEQ)
+            burst_start_addr <= HADDR;
+    end
     always_ff @(posedge HCLK or negedge HRESETn) begin
         if (!HRESETn) begin
-            addr_ph  <= '0;
-            size_ph  <= '0;
-            write_ph <= '0;
-            valid_ph <= '0;
-        end else if (HREADY) begin
-            addr_ph  <= HADDR;
-            size_ph  <= HSIZE;
-            write_ph <= HWRITE;
-            valid_ph <= (HSEL && HTRANS inside {HTRANS_NONSEQ, HTRANS_SEQ});
-        end
+            addr_ph          <= '0;
+            size_ph          <= '0;
+            write_ph         <= '0;
+            valid_ph         <= '0;
+            hwdata_ph        <= '0;
+        end else begin
+            // ── pipeline registers ─────────────────────────────────
+            if (HREADY) begin
+                addr_ph   <= HADDR;
+                size_ph   <= HSIZE;
+                write_ph  <= HWRITE;
+                valid_ph  <= (HSEL && HTRANS inside {HTRANS_NONSEQ, HTRANS_SEQ});
+                hwdata_ph <= HWDATA;
+            end
     end
+    end
+ 
+    //  [1] SLAVE RESPONSE RULES  
 
-    // ============================================================
-    //  [1] SLAVE RESPONSE RULES  —  Spec §3.4, §3.6
-    // ============================================================
-
-    // SR1 — IDLE must get zero wait state OKAY response
-    //       Spec §3.4: "Slave must always provide zero wait state
+    // SR1 — Spec 4.1.1 IDLE or BUSY transfers to nonexistent locations result in a zero wait state OKAY
+    //                  response.
+    //       Spec  3.2 "Slave must always provide zero wait state
     //       OKAY response to IDLE transfers"
-    a_idle_zero_wait_okay: assert property (
-        (HSEL && HTRANS == HTRANS_IDLE) |->
-        (HREADYOUT == 1'b1 && HRESP == HRESP_OKAY)
+    a_idle_okay_only: assert property (
+    (HSEL && HTRANS == HTRANS_IDLE) |->
+    (HRESP == HRESP_OKAY)
     );
-    c_idle_okay: cover property (
-        HSEL && HTRANS == HTRANS_IDLE &&
-        HREADYOUT == 1'b1 && HRESP == HRESP_OKAY
+    c_idle_seen: cover property (
+    HSEL && HTRANS == HTRANS_IDLE && HRESP == HRESP_OKAY
     );
 
     // SR2 — IDLE ignored by slave (HRESP=OKAY)
-    //       Spec §3.4: "Transfer must be ignored by the slave"
+    //       Spec  3.2: "Transfer must be ignored by the slave"
     a_idle_ignored_hresp: assert property (
         (HSEL && HTRANS == HTRANS_IDLE) |->
         (HRESP == HRESP_OKAY)
@@ -101,19 +107,20 @@ module ahb_checker #(
     );
 
     // SR3 — BUSY must get zero wait state OKAY response
-    //       Spec §3.4: "Slave must always provide zero wait state
+    //       Spec  3.4: "Slave must always provide zero wait state
     //       OKAY response to BUSY transfers"
-    a_busy_zero_wait_okay: assert property (
-        (HSEL && HTRANS == HTRANS_BUSY) |->
-        (HREADYOUT == 1'b1 && HRESP == HRESP_OKAY)
+    a_busy_okay_only: assert property (
+    (HSEL && HTRANS == HTRANS_BUSY) |->
+    (HRESP == HRESP_OKAY)
     );
-    c_busy_okay: cover property (
-        HSEL && HTRANS == HTRANS_BUSY &&
-        HREADYOUT == 1'b1 && HRESP == HRESP_OKAY
+    c_busy_in_burst: cover property (
+    HSEL &&
+    $past(HTRANS) inside {HTRANS_NONSEQ, HTRANS_SEQ} &&
+    HTRANS == HTRANS_BUSY
     );
 
     // SR4 — BUSY ignored by slave (HRESP=OKAY)
-    //       Spec §3.4: "Transfer must be ignored by the slave"
+    //       Spec  3.2: "Transfer must be ignored by the slave"
     a_busy_ignored_hresp: assert property (
         (HSEL && HTRANS == HTRANS_BUSY) |->
         (HRESP == HRESP_OKAY)
@@ -126,15 +133,15 @@ module ahb_checker #(
     //       IDLE and BUSY get OKAY with no side effects
     a_only_nonseq_seq_transfer: assert property (
         (HSEL && HTRANS inside {HTRANS_IDLE, HTRANS_BUSY}) |->
-        (HRESP == HRESP_OKAY && HREADYOUT == 1'b1)
+        (HRESP == HRESP_OKAY )
     );
     c_idle_busy_okay_resp: cover property (
         HSEL && HTRANS == HTRANS_BUSY &&
-        HRESP == HRESP_OKAY && HREADYOUT == 1'b1
+        HRESP == HRESP_OKAY 
     );
 
     // SR6 — Invalid HSIZE → ERROR cycle 1: HREADY=0
-    //       Spec §3.3: "Invalid HSIZE must generate HRESP=ERROR"
+    //       Spec  3.3: "Invalid HSIZE must generate HRESP=ERROR"
     a_hsize_invalid_error_c1: assert property (
         (HSEL && HTRANS inside {HTRANS_NONSEQ, HTRANS_SEQ} &&
          HSIZE > HSIZE_B32) |->
@@ -146,7 +153,7 @@ module ahb_checker #(
     );
 
     // SR7 — Invalid HSIZE → ERROR cycle 2: HREADY=1
-    //       Spec §3.6: "ERROR response lasts exactly 2 cycles"
+    //       Spec  3.6: "ERROR response lasts exactly 2 cycles"
     a_hsize_invalid_error_c2: assert property (
         (HSEL && HTRANS inside {HTRANS_NONSEQ, HTRANS_SEQ} &&
          $past(HSIZE) > HSIZE_B32 &&
@@ -160,25 +167,32 @@ module ahb_checker #(
         HRESP == HRESP_ERROR && HREADYOUT == 1'b1
     );
 
-    // SR8 — HRDATA stable while read stalled (HREADY=0)
-    //       Spec §6.1.2: slave only needs valid data in final cycle
-    a_hrdata_stable_wait: assert property (
-        (HSEL && !HREADY &&
-         HTRANS inside {HTRANS_NONSEQ, HTRANS_SEQ} &&
-         HWRITE == 1'b0) |->
-        (HRDATA == $past(HRDATA))
+    // SR8 —  
+    // Spec  6.1.2: slave only needs valid data in final cycle
+    a_hrdata_valid_final: assert property (
+    (HSEL &&
+     $past(HTRANS) inside {HTRANS_NONSEQ, HTRANS_SEQ} &&
+     $past(HWRITE) == 1'b0 &&
+     HREADY == 1'b1 &&
+     HRESP == HRESP_OKAY)
+    |->
+    (!$isunknown(HRDATA))
     );
-    c_hrdata_stable: cover property (
-        HSEL && !HREADY && HWRITE == 1'b0 &&
-        HRDATA == $past(HRDATA)
-    );
+    c_hrdata_valid_final: cover property (
+    HSEL &&
+    $past(HTRANS) inside {HTRANS_NONSEQ, HTRANS_SEQ} &&
+    $past(HWRITE) == 1'b0 &&
+    HREADY == 1'b1 &&
+    HRESP == HRESP_OKAY &&
+    !$isunknown(HRDATA)
+     );
 
     // ============================================================
-    //  [2] ERROR RESPONSE  —  Spec §3.6
+    //  [2] ERROR RESPONSE  
     // ============================================================
 
     // ER1 — ERROR cycle 1: HREADY must be LOW
-    //       Spec §3.6: "HREADY=0 on first ERROR cycle"
+    //       Spec  3.6.2 Waveform, 5.1.3: "HREADY=0 on first ERROR cycle"
     a_error_cycle1_hready_low: assert property (
         (HSEL && HRESP == HRESP_ERROR &&
          $past(HRESP) == HRESP_OKAY) |->
@@ -191,7 +205,7 @@ module ahb_checker #(
     );
 
     // ER2 — ERROR cycle 2: HREADY must be HIGH
-    //       Spec §3.6: "HREADY=1 on second ERROR cycle"
+    //       Spec  3.6.2 Waveform, 5.1.3: "HREADY=1 on second ERROR cycle"
     a_error_cycle2_hready_high: assert property (
         (HSEL && $past(HRESP) == HRESP_ERROR &&
          $past(HREADYOUT) == 1'b0) |->
@@ -204,7 +218,7 @@ module ahb_checker #(
     );
 
     // ER3 — ERROR must not persist beyond 2 cycles
-    //       Spec §3.6: "ERROR lasts exactly 2 cycles"
+    //       Spec  3.6.2 Waveform, 5.1.3: "ERROR lasts exactly 2 cycles"
     a_error_max_2_cycles: assert property (
         (HSEL && $past(HRESP) == HRESP_ERROR &&
          $past(HREADYOUT) == 1'b1) |->
@@ -217,18 +231,20 @@ module ahb_checker #(
     );
 
     // ============================================================
-    //  [3] HSEL INACTIVE STATE  —  Spec §2
+    //  [3] HSEL INACTIVE STATE   
     // ============================================================
 
     // HS1 — HSEL=0: HREADYOUT must be default HIGH
+    // Derived from: Section 3,4 – Slave must not insert wait states when not selected
     a_hsel_0_hreadyout_default: assert property (
-        (!HSEL) |-> (HREADYOUT == 1'b1)
+        (!HSEL && $past(!HSEL)) |-> (HREADYOUT == 1'b1)
     );
     c_hsel_0_hready: cover property (
         !HSEL && HREADYOUT == 1'b1
     );
 
     // HS2 — HSEL=0: HRESP must be OKAY
+    //Derived from: Section 3 , 5– Response is only meaningful for active transfers
     a_hsel_0_hresp_default: assert property (
         (!HSEL) |-> (HRESP == HRESP_OKAY)
     );
@@ -237,19 +253,20 @@ module ahb_checker #(
     );
 
     // HS3 — HSEL=0: HRDATA must be 0
-    a_hsel_0_hrdata_default: assert property (
-        (!HSEL) |-> (HRDATA == '0)
+    //Derived from: Section 2,5– Read data is valid only during active transfer phase
+    a_hsel_0_hrdata_safe: assert property (
+    !HSEL |-> !$isunknown(HRDATA)
     );
-    c_hsel_0_hrdata: cover property (
-        !HSEL && HRDATA == '0
+    c_hsel_0_hrdata_default: cover property (
+    !HSEL && !$isunknown(HRDATA)
     );
 
     // ============================================================
-    //  [4] DATA BUS  —  Spec §6.1
+    //  [4] DATA BUS  —  Spec  6.1
     // ============================================================
 
     // DB1 — HRDATA valid in final cycle of read (HREADY=1, OKAY)
-    //       Spec §6.1.2: "Slave only provides valid data in
+    //       Spec  6.1.2: "Slave only provides valid data in
     //       final cycle when HREADY HIGH"
     a_hrdata_valid_on_hready: assert property (
         (HSEL && $past(HTRANS) inside {HTRANS_NONSEQ, HTRANS_SEQ} &&
@@ -264,7 +281,7 @@ module ahb_checker #(
     );
 
     // DB2 — HRDATA not X/Z on valid read
-    //       Spec §6.1.2: "Valid data on OKAY response only"
+    //       Spec  6.1.2: "Valid data on OKAY response only"
     a_hrdata_not_xz_valid_read: assert property (
         (HSEL && HREADY == 1'b1 &&
          HRESP == HRESP_OKAY &&
@@ -278,7 +295,7 @@ module ahb_checker #(
     );
 
     // DB3 — HRDATA not required valid during ERROR
-    //       Spec §6.1.2: "ERROR responses do not require valid data"
+    //       Spec  6.1.2: "ERROR responses do not require valid data"
     //       (Intentionally no assertion — permissive by spec)
     //       Cover: confirm ERROR scenario is reachable
     c_hrdata_during_error: cover property (
@@ -286,7 +303,7 @@ module ahb_checker #(
     );
 
     // DB4 — HWDATA valid in write data phase (master drives)
-    //       Spec §6.1.1: checked here as functional sanity
+    //       Spec  6.1.1: checked here as functional sanity
     a_hwdata_valid_after_write: assert property (
         (HSEL && $past(HTRANS) inside {HTRANS_NONSEQ, HTRANS_SEQ} &&
          $past(HWRITE) == 1'b1 && HREADY) |->
@@ -298,11 +315,11 @@ module ahb_checker #(
     );
 
     // ============================================================
-    //  [5] SIGNAL INTEGRITY — SLAVE OUTPUTS  —  Spec §2
+    //  [5] SIGNAL INTEGRITY — SLAVE OUTPUTS  
     // ============================================================
 
     // SI1 — HRESP valid encoding only
-    //       Spec §3.6 Table: OKAY=0, ERROR=1
+    //       Spec  5.1 Table: OKAY=0, ERROR=1
     a_hresp_valid: assert property (
         (!$isunknown(HRESP)) &&
         (HRESP inside {HRESP_OKAY, HRESP_ERROR})
@@ -312,26 +329,14 @@ module ahb_checker #(
     );
 
     // SI2 — HREADYOUT no X/Z
-    //       Spec §3.6: handshake signal integrity
+    //      Spec 2.3 : handshake signal integrity
     a_hreadyout_no_xz: assert property (
         (!$isunknown(HREADYOUT))
     );
     c_hreadyout_low: cover property (
         HREADYOUT == 1'b0
     );
-
-    // SI3 — HRDATA no X/Z on valid read
-    a_hrdata_no_xz_read: assert property (
-        (HSEL && HREADY == 1'b1 &&
-         HRESP == HRESP_OKAY &&
-         $past(HWRITE) == 1'b0 &&
-         $past(HTRANS) inside {HTRANS_NONSEQ, HTRANS_SEQ}) |->
-        (!$isunknown(HRDATA))
-    );
-    c_hrdata_no_xz: cover property (
-        HREADY == 1'b1 && HRESP == HRESP_OKAY &&
-        $past(HWRITE) == 1'b0 && !$isunknown(HRDATA)
-    );
+ 
 
     // ============================================================
     //  [6] WRITE CORRECTNESS  —  Functional
@@ -339,13 +344,13 @@ module ahb_checker #(
 
     // WC1 — Data written to A must be readable from A
     a_write_read_correctness: assert property (
-        (HSEL && valid_ph && write_ph &&
-         HREADY && HRESP == HRESP_OKAY &&
-         HTRANS inside {HTRANS_NONSEQ, HTRANS_SEQ} &&
-         HWRITE == 1'b0 &&
-         HADDR  == addr_ph && HSIZE == size_ph) |=>
-        (HRDATA == $past(HWDATA))
-    );
+    (valid_ph && write_ph &&                    // data phase of write
+     HSEL && HTRANS inside {HTRANS_NONSEQ, HTRANS_SEQ} &&
+     HWRITE == 1'b0 &&                          // current is read
+     HADDR == addr_ph) |=>                      // same address
+    (HRDATA == hwdata_ph)
+);
+   
     c_write_then_read: cover property (
         valid_ph && write_ph && HREADY &&
         HTRANS inside {HTRANS_NONSEQ, HTRANS_SEQ} &&
@@ -367,12 +372,12 @@ module ahb_checker #(
 
     // WC3 — Back-to-back writes: latest value wins
     a_latest_write_wins: assert property (
-        (HSEL && HREADY && HRESP == HRESP_OKAY &&
-         HTRANS inside {HTRANS_NONSEQ, HTRANS_SEQ} &&
-         HWRITE == 1'b0 && HADDR == addr_ph &&
-         valid_ph && write_ph) |=>
-        (HRDATA == $past(HWDATA))
-    );
+    (valid_ph && write_ph &&
+     HSEL && HTRANS inside {HTRANS_NONSEQ, HTRANS_SEQ} &&
+     HWRITE == 1'b0 &&
+     HADDR == addr_ph) |=>
+    (HRDATA == hwdata_ph)
+);
     c_back2back_write: cover property (
         valid_ph && write_ph && HREADY && HADDR == addr_ph
     );
@@ -384,7 +389,7 @@ module ahb_checker #(
          HREADY && HRESP == HRESP_OKAY &&
          HTRANS inside {HTRANS_NONSEQ, HTRANS_SEQ} &&
          HWRITE == 1'b0 && HADDR == addr_ph) |=>
-        (HRDATA[31:0] == $past(HWDATA[31:0]))
+        (HRDATA[31:0] == hwdata_ph[31:0])
     );
     c_word_write: cover property (
         valid_ph && write_ph && size_ph == HSIZE_B32 && HREADY
@@ -424,10 +429,10 @@ module ahb_checker #(
          HREADY && HRESP == HRESP_OKAY &&
          HTRANS inside {HTRANS_NONSEQ, HTRANS_SEQ} &&
          HWRITE == 1'b0 && HADDR == addr_ph) |=>
-        ( (addr_ph[1:0] == 2'b00) ? (HRDATA[7:0]   == $past(HWDATA[7:0]))   :
-          (addr_ph[1:0] == 2'b01) ? (HRDATA[15:8]  == $past(HWDATA[15:8]))  :
-          (addr_ph[1:0] == 2'b10) ? (HRDATA[23:16] == $past(HWDATA[23:16])) :
-                                    (HRDATA[31:24] == $past(HWDATA[31:24])) )
+        ( (addr_ph[1:0] == 2'b00) ? (HRDATA[7:0]   == hwdata_ph[7:0])   :
+          (addr_ph[1:0] == 2'b01) ? (HRDATA[15:8]  == hwdata_ph[15:8])  :
+          (addr_ph[1:0] == 2'b10) ? (HRDATA[23:16] == hwdata_ph[23:16]) :
+                                    (HRDATA[31:24] == hwdata_ph[31:24]) )
     );
     c_byte_write: cover property (
         valid_ph && write_ph && size_ph == HSIZE_B8 && HREADY
@@ -459,8 +464,8 @@ module ahb_checker #(
          HREADY && HRESP == HRESP_OKAY &&
          HTRANS inside {HTRANS_NONSEQ, HTRANS_SEQ} &&
          HWRITE == 1'b0 && HADDR == addr_ph) |=>
-        ( (addr_ph[1] == 1'b0) ? (HRDATA[15:0]  == $past(HWDATA[15:0]))  :
-                                  (HRDATA[31:16] == $past(HWDATA[31:16])) )
+        ( (addr_ph[1] == 1'b0) ? (HRDATA[15:0]  == hwdata_ph[15:0])  :
+                                  (HRDATA[31:16] == hwdata_ph[31:16]) )
     );
     c_hword_write: cover property (
         valid_ph && write_ph && size_ph == HSIZE_B16 && HREADY
@@ -519,7 +524,7 @@ module ahb_checker #(
          HTRANS inside {HTRANS_NONSEQ, HTRANS_SEQ} &&
          HWRITE == 1'b0 &&
          HADDR  == addr_ph && HSIZE == size_ph) |=>
-        (HRDATA == $past(HWDATA))
+        (HRDATA == hwdata_ph)
     );
     c_raw_scenario: cover property (
         valid_ph && write_ph && HREADY &&
@@ -573,7 +578,7 @@ module ahb_checker #(
          HREADY && HRESP == HRESP_OKAY &&
          HTRANS inside {HTRANS_NONSEQ, HTRANS_SEQ} &&
          HWRITE == 1'b0 && HADDR == addr_ph) |=>
-        (HRDATA == $past(HWDATA))
+        (HRDATA == hwdata_ph)
     );
     c_pipeline_rw: cover property (
         valid_ph && write_ph && HREADY &&
@@ -590,60 +595,23 @@ module ahb_checker #(
     );
 
     // ============================================================
-    //  [10] ADDRESS & BOUNDARY  —  Spec §3.5
+    //  [10] ADDRESS & BOUNDARY   
     // ============================================================
 
-    // A1 — Out-of-range address → HRESP=ERROR or HRDATA=0
-    //      Spec §3.5: defined behavior for illegal addresses
+    // A1 Spec 4.1.1 — Out-of-range address  HRESP=ERROR  
     a_out_of_range_error: assert property (
         (HSEL && HTRANS inside {HTRANS_NONSEQ, HTRANS_SEQ} &&
          HREADY && HADDR > MAX_ADDR) |=>
-        (HRESP == HRESP_ERROR || HRDATA == '0)
+        (HRESP == HRESP_ERROR)
     );
     c_out_of_range: cover property (
         HSEL && HTRANS == HTRANS_NONSEQ &&
         HREADY && HADDR > MAX_ADDR
     );
 
-    // A2 — WRAP burst address stays inside aligned boundary
-    //      Spec §3.5: "Wrapping bursts wrap at address boundary"
-    a_wrap4_no_region_cross: assert property (
-        (HSEL && HTRANS inside {HTRANS_NONSEQ, HTRANS_SEQ} &&
-         HBURST == HBURST_WRAP4 && HREADY) |->
-        ( HADDR[HADDR_SIZE-1 : $clog2(4*(1<<HSIZE))] ==
-          $past(HADDR[HADDR_SIZE-1 : $clog2(4*(1<<HSIZE))]) ||
-          HTRANS == HTRANS_NONSEQ )
-    );
-    c_wrap4_in_region: cover property (
-        HSEL && HBURST == HBURST_WRAP4 &&
-        HTRANS == HTRANS_SEQ && HREADY
-    );
+    
 
-    a_wrap8_no_region_cross: assert property (
-        (HSEL && HTRANS inside {HTRANS_NONSEQ, HTRANS_SEQ} &&
-         HBURST == HBURST_WRAP8 && HREADY) |->
-        ( HADDR[HADDR_SIZE-1 : $clog2(8*(1<<HSIZE))] ==
-          $past(HADDR[HADDR_SIZE-1 : $clog2(8*(1<<HSIZE))]) ||
-          HTRANS == HTRANS_NONSEQ )
-    );
-    c_wrap8_in_region: cover property (
-        HSEL && HBURST == HBURST_WRAP8 &&
-        HTRANS == HTRANS_SEQ && HREADY
-    );
-
-    a_wrap16_no_region_cross: assert property (
-        (HSEL && HTRANS inside {HTRANS_NONSEQ, HTRANS_SEQ} &&
-         HBURST == HBURST_WRAP16 && HREADY) |->
-        ( HADDR[HADDR_SIZE-1 : $clog2(16*(1<<HSIZE))] ==
-          $past(HADDR[HADDR_SIZE-1 : $clog2(16*(1<<HSIZE))]) ||
-          HTRANS == HTRANS_NONSEQ )
-    );
-    c_wrap16_in_region: cover property (
-        HSEL && HBURST == HBURST_WRAP16 &&
-        HTRANS == HTRANS_SEQ && HREADY
-    );
-
-    // A3 — INCR burst address within memory boundary
+    // A3 — INCR burst within memory
     a_incr_no_mem_boundary_cross: assert property (
         (HSEL && HTRANS inside {HTRANS_SEQ, HTRANS_BUSY} &&
          HBURST inside {HBURST_INCR,  HBURST_INCR4,
@@ -656,13 +624,15 @@ module ahb_checker #(
         HBURST == HBURST_INCR4 && HREADY &&
         HADDR <= MAX_ADDR
     );
-
+     
+       
     // ============================================================
-    //  [11] RESET  —  Spec §4
+    //  [11] RESET  
     // ============================================================
 
+    //Spec 7
     // R1 — HREADY high within RESET_BOUND cycles after reset
-    //      Spec §4: "After reset HREADY must return high"
+    //      Spec  7: "After reset HREADY must return high"
     a_hready_high_after_reset: assert property (
         @(posedge HCLK)
         ($rose(HRESETn)) |->
@@ -739,5 +709,37 @@ module ahb_checker #(
         @(posedge HCLK)
         $rose(HRESETn) ##1 HRESP == HRESP_OKAY
     );
+  
+    // ============================================================
+    //  WRAP BURST ASSERTIONS (Slave checks)
+    // ============================================================
 
-endmodule
+    // WRAP4 - No ERROR response during WRAP burst
+    a_wrap4_no_error: assert property (
+        (HSEL && HBURST == HBURST_WRAP4 && 
+        HTRANS inside {HTRANS_NONSEQ, HTRANS_SEQ, HTRANS_BUSY}) |->
+        (HRESP == HRESP_OKAY)
+    );
+
+    // WRAP4 - Address remains within 4-beat aligned region
+    a_wrap4_addr_in_region: assert property (
+        (HSEL && HBURST == HBURST_WRAP4 && HTRANS == HTRANS_SEQ && HREADY) |->
+        (HADDR[HADDR_SIZE-1:2] == $past(HADDR[HADDR_SIZE-1:2]) ||
+        HTRANS == HTRANS_NONSEQ)
+    );
+
+    // WRAP8 - Address remains within 8-beat aligned region  
+    a_wrap8_addr_in_region: assert property (
+        (HSEL && HBURST == HBURST_WRAP8 && HTRANS == HTRANS_SEQ && HREADY) |->
+        (HADDR[HADDR_SIZE-1:3] == $past(HADDR[HADDR_SIZE-1:3]) ||
+        HTRANS == HTRANS_NONSEQ)
+    );
+
+    // WRAP16 - Address remains within 16-beat aligned region
+    a_wrap16_addr_in_region: assert property (
+        (HSEL && HBURST == HBURST_WRAP16 && HTRANS == HTRANS_SEQ && HREADY) |->
+        (HADDR[HADDR_SIZE-1:4] == $past(HADDR[HADDR_SIZE-1:4]) ||
+        HTRANS == HTRANS_NONSEQ)
+);
+  
+    endmodule

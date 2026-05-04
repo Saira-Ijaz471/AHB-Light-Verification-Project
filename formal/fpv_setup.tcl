@@ -1,78 +1,36 @@
-# ============================================================
+# =============================================================
 #  JasperGold FPV Setup Script
-#  Project : AMBA AHB-Lite RAM Verification
-#  Role    : B (Formal)
-# ============================================================
+#  Project  : EE-5214 AMBA AHB-Lite RAM Verification
+# =============================================================
 
-# ------------------------------------------------------------
-# 1. ANALYZE  
-# ------------------------------------------------------------
+analyze -sv ../dut/packages/ahb3lite_pkg.sv
 
-# Package  
 analyze -sv \
-    ../dut/packages/ahb3lite_pkg.sv
-
-# DUT
-analyze -sv \
+    ../dut/rtl/mem.sv    \
     ../dut/rtl/design.sv
 
-# Checker + Bind
 analyze -sv \
-    ../checker/ahb_checker.sv   \
-    ../checker/bind_ahb.sv      \
+    ../checker/ahb_checker.sv     \
     ../checker/ahb_assumptions.sv \
-    ../checker/ahb_cover.sv
+    ../checker/ahb_cover.sv       \
+    ../checker/bind_ahb.sv
 
-# ------------------------------------------------------------
-# 2. ELABORATE — Top module  
-# ------------------------------------------------------------
+elaborate -top ahb3liten      \
+    -parameter MEM_SIZE   32  \
+    -parameter MEM_DEPTH  256  \
+    -parameter HADDR_SIZE  16 \
+    -parameter HDATA_SIZE 32
 
-elaborate \
-    -top ahb3lite_sram \
-    -bbox_mul 8
+clock HCLK
+reset -expression {~HRESETn}
 
-# ------------------------------------------------------------
-# 3. CLOCK & RESET
-# ------------------------------------------------------------
+# prove runs assertions AND covers together
+prove -all
 
-clock  HCLK
-reset  -expression {~HRESETn}
-
-# ------------------------------------------------------------
-# 4. PROVE
-# ------------------------------------------------------------
-
-prove -task FPV
-
-# ------------------------------------------------------------
-# 5. RESULTS — jg_results/  save 
-# ------------------------------------------------------------
-
-report -task FPV \
+report -all \
+    -force \
     -file ../formal/jg_results/fpv_report.txt
 
-# Proven assertions
-report -task FPV \
-    -proven \
-    -file ../formal/jg_results/proven/proven_props.txt
-
-# Counterexamples
-report -task FPV \
-    -cex \
-    -file ../formal/jg_results/cex/cex_props.txt
-
-# Bounded results
-report -task FPV \
-    -bounded \
-    -file ../formal/jg_results/bounded/bounded_props.txt
-
-# Cover properties
-report -task FPV \
-    -cover \
-    -file ../formal/jg_results/cover_report.txt
-
-# ------------------------------------------------------------
-# 6. VACUITY CHECK  
-# ------------------------------------------------------------
-
-check_vacuity -task FPV
+puts "========================================================"
+puts "  FPV Done — check jg_results/fpv_report.txt"
+puts "========================================================"

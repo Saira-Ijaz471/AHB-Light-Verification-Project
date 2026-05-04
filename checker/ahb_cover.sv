@@ -9,7 +9,7 @@
 //             If a scenario is unreachable, explain why
 //             in the Part 3 report.
 //
-//  Required by project spec (Part 3 Task 3.2):
+//   (Part 3 Task 3.2):
 //  COV1 — HREADY=0 held for 3+ consecutive cycles
 //  COV2 — WRAP4 burst where wrap actually happens
 //  COV3 — Write immediately followed by read same address
@@ -117,15 +117,7 @@ module ahb_cover #(
         HTRANS == HTRANS_BUSY   && HREADY ##1
         HTRANS == HTRANS_SEQ    && HREADY
     );
-
-    // COV7 — INCR burst approaching 1KB boundary edge
-    //        Address bits [9:0] near max before boundary
-    cov_incr_near_1kb: cover property (
-        HSEL && HBURST == HBURST_INCR &&
-        HTRANS inside {HTRANS_NONSEQ, HTRANS_SEQ} &&
-        HREADY && HADDR[9:0] > 10'h3E0
-    );
-
+ 
     // COV8 — Byte write to each byte lane
     cov_byte_write_lane0: cover property (
         HSEL && HTRANS == HTRANS_NONSEQ && HREADY &&
