@@ -66,14 +66,14 @@ covergroup ahb_cg @(posedge HCLK);
                                           }
 
     //HSIZE Coverage
-    hsize_cp:       coverpoint HSIZE      { bins BYTE          = {HSIZE_B8   };
-                                            bins HWORD         = {HSIZE_B16  };
-                                            bins WORD          = {HSIZE_B32  };
-                                            bins DWORD         = {HSIZE_B64  };
-                                            bins B128          = {HSIZE_B128 };
-                                            bins B256          = {HSIZE_B256 };
-                                            bins B512          = {HSIZE_B512 };
-                                            bins B1024         = {HSIZE_B1024};
+    hsize_cp:       coverpoint HSIZE      { bins        BYTE          = {HSIZE_B8   };
+                                            bins        HWORD         = {HSIZE_B16  };
+                                            bins        WORD          = {HSIZE_B32  };
+                                            ignore_bins DWORD         = {HSIZE_B64  };
+                                            ignore_bins B128          = {HSIZE_B128 };
+                                            ignore_bins B256          = {HSIZE_B256 };
+                                            ignore_bins B512          = {HSIZE_B512 };
+                                            ignore_bins B1024         = {HSIZE_B1024};
                                           }
 
 
@@ -90,17 +90,17 @@ covergroup ahb_cg @(posedge HCLK);
 
 
     //HRESP Coverage
-    hresp_cp:       coverpoint HRESP      { bins OKAY  = {HRESP_OKAY };
-                                            bins ERROR = {HRESP_ERROR};
+    hresp_cp:       coverpoint HRESP      { bins OKAY         = {HRESP_OKAY };
+                                            ignore_bins ERROR = {HRESP_ERROR};
                                           }
 
 
     //Address Coverage
     //2^16 = 65536  into 4 address spaces: 65536/4 = 16384 each space 
-    haddr_cp:       coverpoint HADDR      { bins low    = {[0 : (2**HADDR_SIZE)/4 - 1]};                          //0    -16383                   
-                                            bins mid1   = {[(2**HADDR_SIZE)/4 : (2**HADDR_SIZE)/2 - 1]};          //16384-32767
-                                            bins mid2   = {[(2**HADDR_SIZE)/2 : (3*(2**HADDR_SIZE)/4) - 1]};      //32768-49151
-                                            bins high   = {[(3*(2**HADDR_SIZE)/4) : (2**HADDR_SIZE - 1)]};        //49151-65535
+    haddr_cp:       coverpoint HADDR      { bins        low    = {[0 : (2**HADDR_SIZE)/4 - 1]};                          //0    -16383                   
+                                            ignore_bins mid1   = {[(2**HADDR_SIZE)/4 : (2**HADDR_SIZE)/2 - 1]};          //16384-32767
+                                            ignore_bins mid2   = {[(2**HADDR_SIZE)/2 : (3*(2**HADDR_SIZE)/4) - 1]};      //32768-49151
+                                            ignore_bins high   = {[(3*(2**HADDR_SIZE)/4) : (2**HADDR_SIZE - 1)]};        //49151-65535
                                           }   
 
     
