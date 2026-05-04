@@ -1,0 +1,14 @@
+# Enable SystemVerilog
+-sv
+
+# Access for debugging
+-access +rwc
+
+# Enable coverage
+-coverage all
+
+# Top module
+-top tb_top 
+
+# File list 
+-f filelist.f
