@@ -1,0 +1,10 @@
+# Enable ONLY functional coverage (covergroups)
+select_coverage -covergroup
+
+# Set full scope
+set_scope -all
+
+# Exclude testbench modules
+deselect_coverage -module tb_top
+deselect_coverage -module scoreboard
+deselect_coverage -module ahb_master
