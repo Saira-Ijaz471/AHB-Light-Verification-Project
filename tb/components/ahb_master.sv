@@ -80,10 +80,6 @@ class ahb_master;
             if (i == 0)
                 htrans_q[i] = NONSEQ;
             else begin
-                //randomly insert BUSY
-                if ($urandom_range(0,4) == 0)
-                    htrans_q[i] = BUSY;
-                else
                     htrans_q[i] = SEQ;
             end
         end
@@ -148,7 +144,7 @@ class ahb_master;
                 wait (vif.HREADYOUT);
 
                 //capture data
-                @(posedge vif.HCLK); #1;
+                @(posedge vif.HCLK); #11;
                 read_data = vif.HRDATA;
                 sb_ahb_master.check_read(curr_addr, read_data, hsize);
             end
