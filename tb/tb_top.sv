@@ -49,6 +49,28 @@ ahb3liten #(
     .HRESP     (ahb_if.HRESP)
 );
 
+ahb3liten #(
+    .MEM_SIZE   (32),
+    .MEM_DEPTH  (256),
+    .HADDR_SIZE (16),
+    .HDATA_SIZE (32)
+) dut2 (
+    .HCLK      (ahb_if_directed.HCLK),
+    .HRESETn   (HRESETn),
+    .HSEL      (ahb_if_directed.HSEL),
+    .HADDR     (ahb_if_directed.HADDR),
+    .HWDATA    (ahb_if_directed.HWDATA),
+    .HRDATA    (ahb_if_directed.HRDATA),
+    .HWRITE    (ahb_if_directed.HWRITE),
+    .HSIZE     (ahb_if_directed.HSIZE),
+    .HBURST    (ahb_if_directed.HBURST),
+    .HTRANS    (ahb_if_directed.HTRANS),
+    .HPROT     (ahb_if_directed.HPROT),
+    .HREADY    (ahb_if_directed.HREADY),
+    .HREADYOUT (ahb_if_directed.HREADYOUT),
+    .HRESP     (ahb_if_directed.HRESP)
+);
+
 assign be_tb         = dut.be;
 
 
@@ -87,7 +109,6 @@ ahb_master m;
 //COVERFILE
 ahb_cov #(16,32) cov (
     .HCLK      (ahb_if.HCLK),
-    .HRESETn   (HRESETn),
     .HSEL      (ahb_if.HSEL),
     .HADDR     (ahb_if.HADDR),
     .HWDATA    (ahb_if.HWDATA),
@@ -106,19 +127,8 @@ ahb_cov #(16,32) cov (
 
 //CONNECT MASTER
 initial begin
-    HRESETn = 0;
-    ahb_if.HSEL    = 0;
-    ahb_if.HADDR   = 0;
-    ahb_if.HWDATA  = 0;
-    ahb_if.HWRITE  = 0;
-    ahb_if.HSIZE   = 0;
-    ahb_if.HBURST  = 0;
-    ahb_if.HTRANS  = 0;
-    ahb_if.HREADY  = 0;
-    ahb_if.HPROT   = 0;
+    directed_tb.reset_dut();
 
-    repeat(2) @(posedge HCLK);
-    HRESETn = 1;
     ahb_if.HREADY  = 1;
     
     m = new(ahb_if);
@@ -128,29 +138,32 @@ initial begin
         m.drive(sb_out);
     end
 
-    $display("Simulation finished: 10000 transactions done");
+    $display("## RANDOM TRANSACTIONS COMPLETED ##");
+    $display("TOTAL PASSED = %0d", m.sb_ahb_master.pass_count);
+    $display("TOTAL FAILED = %0d", m.sb_ahb_master.fail_count);
     -> master_done;               //trigger event
 end
 
 //DIRECTED TESTS
 initial begin
     @(master_done);               //wait for master to complete
+    $display("########### DIRECTED TEST START ##############");
     directed_tb.reset_dut();
   
     //SINGLE read and write for byte, halfword, and word sizes
     directed_tb.ahb_write(1, 32'h10, 32'haaaaaaaa, HSIZE_BYTE);
     directed_tb.ahb_write(1, 32'h74, 32'hbbbbbbbb, HSIZE_HWORD);
     directed_tb.ahb_write(1, 32'h64, 32'hdeadbeaf, HSIZE_WORD);
-
+    
     directed_tb.ahb_read(0, 32'h10, HSIZE_BYTE,  directed_tb.rdata_tb);
     directed_tb.ahb_read(0, 32'h74, HSIZE_HWORD, directed_tb.rdata_tb);
     directed_tb.ahb_read(0, 32'h64, HSIZE_WORD,  directed_tb.rdata_tb);
-
+    
     //INCR4, INCR8, INCR16 — write then read back all beats
     directed_tb.burst_incr(4,  32'h10, 32'h67083581, HSIZE_WORD);
     directed_tb.burst_incr(8,  32'h20, 32'h25641869, HSIZE_WORD);
     directed_tb.burst_incr(16, 32'h50, 32'h51015286, HSIZE_WORD);
-
+    
     directed_tb.burst_incr(4,  32'h1f, 32'h91, HSIZE_BYTE);
     directed_tb.burst_incr(8,  32'h2b, 32'h2d, HSIZE_BYTE);
     directed_tb.burst_incr(16, 32'h3e, 32'he7, HSIZE_BYTE);
@@ -183,6 +196,7 @@ initial begin
     //RAW
     directed_tb.ahb_write(1, 32'h64, 32'hdeadbeaf, HSIZE_WORD);
     directed_tb.ahb_read (0, 32'h64, HSIZE_WORD,  directed_tb.rdata_tb);
+    $display("########### DIRECTED TEST COMPLETED ##############");
     $finish;
 end
 
