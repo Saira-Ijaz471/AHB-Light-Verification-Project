@@ -48,9 +48,7 @@ module ahb_cover #(
     input                       HREADYOUT,
     input                       HREADY,
     input                       HRESP
-);
-
-    // ---- default clocking --------------------------------------
+); 
     default clocking ahb_clk @(posedge HCLK); endclocking
     default disable iff (!HRESETn);
 

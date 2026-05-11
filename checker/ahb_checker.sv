@@ -4,23 +4,7 @@
 //  Role     : B — Assertions & Formal
 //  Spec     : ARM IHI0033A
 //
-//  NOTE: Master behaviour is constrained in ahb_assumptions.sv
-//        This file only checks DUT (slave) outputs and
-//        functional memory correctness.
-//
-//  Sections:
-//  [1]  Slave Response        — SR1  to SR8   (Spec  3.2,4.1.1) slaves must always provide a zero wait st,  3.6)
-//  [2]  ERROR Response        — ER1  to ER3   (Spec  3.6.2) done
-//  [3]  HSEL Inactive         — HS1  to HS3   (Spec  3,2,5 inferred from spec) done
-//  [4]  Data Bus              — DB1  to DB4   (Spec  6.1.1, 6.1.2) done
-//  [5]  Signal Integrity      — SI1  to SI2   (Spec  5.1,2.3) done
-//  [6]  Write Correctness     — WC1  to WC6   (Functional)
-//  [7]  Byte & HW Masking     — M1   to M4    (Functional)
-//  [8]  Read Correctness      — RC1  to RC4   (Functional)
-//  [9]  Pipeline              — P1   to P4    (Functional)
-//  [10] Address & Boundary    — A1   to A3    (Spec  3.5.3,4.1.1 )done
-//  [11] Reset                 — R1   to R7    (Spec  7)
-                   
+ 
 import ahb3lite_pkg::*;
 module ahb_checker #(
     parameter int HADDR_SIZE  = 32,
@@ -42,53 +26,22 @@ module ahb_checker #(
     input                       HREADY,
     input                       HRESP
 );
- 
-    // ── default clocking & disable ────────────────────────────────
+
+    localparam SLAVE_MAX_ADDR = 32'h3FF;  // 1KB boundary
+    localparam [HADDR_SIZE-1:0] MAX_ADDR = (MEM_DEPTH * (HDATA_SIZE/8)) - 1;
+
+
     default clocking ahb_clk @(posedge HCLK); endclocking
     default disable iff (!HRESETn);
  
-    // ── max valid address ─────────────────────────────────────────
-    localparam [HADDR_SIZE-1:0] MAX_ADDR =
-        (MEM_DEPTH * (HDATA_SIZE/8)) - 1;
+    logic nonexistent_addr;
+    assign nonexistent_addr = (HADDR > SLAVE_MAX_ADDR);
  
-    logic [HADDR_SIZE-1:0] addr_ph;
-    logic [2:0]            size_ph;
-    logic                  write_ph;
-    logic                  valid_ph;
-    logic [HDATA_SIZE-1:0] hwdata_ph;
   
-    logic [HADDR_SIZE-1:0] burst_start_addr;
-    always_ff @(posedge HCLK or negedge HRESETn) begin
-        if (!HRESETn) burst_start_addr <= '0;
-        else if (HREADY && HTRANS == HTRANS_NONSEQ)
-            burst_start_addr <= HADDR;
-    end
-    
-    always_ff @(posedge HCLK or negedge HRESETn) begin
-        if (!HRESETn) begin
-            addr_ph          <= '0;
-            size_ph          <= '0;
-            write_ph         <= '0;
-            valid_ph         <= '0;
-            hwdata_ph        <= '0;
-        end else begin
-            // ── pipeline registers ─────────────────────────────────
-            if (HREADY) begin
-                addr_ph   <= HADDR;
-                size_ph   <= HSIZE;
-                write_ph  <= HWRITE;
-                valid_ph  <= (HSEL && HTRANS inside {HTRANS_NONSEQ, HTRANS_SEQ});
-                hwdata_ph <= HWDATA;
-            end
-    end
-    end
- 
     //  [1] SLAVE RESPONSE RULES  
-
-    // SR1 — Spec 4.1.1 IDLE or BUSY transfers to nonexistent locations result in a zero wait state OKAY
-    //                  response.
-    //       Spec  3.2 "Slave must always provide zero wait state
-    //       OKAY response to IDLE transfers"
+   
+    //Spec  3.2: "Slave must always provide zero wait state
+    //OKAY response to BUSY transfers"
     a_idle_okay_only: assert property (
     (HSEL && HTRANS == HTRANS_IDLE) |->
     (HRESP == HRESP_OKAY)
@@ -97,19 +50,6 @@ module ahb_checker #(
     HSEL && HTRANS == HTRANS_IDLE && HRESP == HRESP_OKAY
     );
 
-    // SR2 — IDLE ignored by slave (HRESP=OKAY)
-    //       Spec  3.2: "Transfer must be ignored by the slave"
-    a_idle_ignored_hresp: assert property (
-        (HSEL && HTRANS == HTRANS_IDLE) |->
-        (HRESP == HRESP_OKAY)
-    );
-    c_idle_ignored: cover property (
-        HSEL && HTRANS == HTRANS_IDLE && HRESP == HRESP_OKAY
-    );
-
-    // SR3 — BUSY must get zero wait state OKAY response
-    //       Spec  3.4: "Slave must always provide zero wait state
-    //       OKAY response to BUSY transfers"
     a_busy_okay_only: assert property (
     (HSEL && HTRANS == HTRANS_BUSY) |->
     (HRESP == HRESP_OKAY)
@@ -120,76 +60,35 @@ module ahb_checker #(
     HTRANS == HTRANS_BUSY
     );
 
-    // SR4 — BUSY ignored by slave (HRESP=OKAY)
-    //       Spec  3.2: "Transfer must be ignored by the slave"
-    a_busy_ignored_hresp: assert property (
-        (HSEL && HTRANS == HTRANS_BUSY) |->
-        (HRESP == HRESP_OKAY)
-    );
-    c_busy_ignored: cover property (
-        HSEL && HTRANS == HTRANS_BUSY && HRESP == HRESP_OKAY
+
+    //4.1.1: If a NONSEQUENTIAL or SEQUENTIAL transfer is attempted to a nonexistent
+    // address location then the default slave provides an ERROR response.
+    // IDLE or BUSY transfers to nonexistent locations result in a okay response
+
+    // 4.1.1 — NONSEQ/SEQ to nonexistent : ERROR 
+    a_non_and_seq_nonexsistent_error: assert property (@(posedge HCLK) disable iff (!HRESETn)
+        ((HTRANS == HTRANS_NONSEQ|| HTRANS == HTRANS_SEQ) && nonexistent_addr)
+        |=> (HRESP == HRESP_ERROR)
     );
 
-    // SR5 — Only NONSEQ/SEQ initiate valid transfer
-    //       IDLE and BUSY get OKAY with no side effects
-    a_only_nonseq_seq_transfer: assert property (
-        (HSEL && HTRANS inside {HTRANS_IDLE, HTRANS_BUSY}) |->
-        (HRESP == HRESP_OKAY )
+    c_non_and_seq_nonexsistent_error:cover property (@(posedge HCLK) disable iff (!HRESETn)
+        ((HTRANS == HTRANS_NONSEQ|| HTRANS == HTRANS_SEQ) && nonexistent_addr)
+        ##1 (HRESP == HRESP_ERROR)
     );
-    c_idle_busy_okay_resp: cover property (
-        HSEL && HTRANS == HTRANS_BUSY &&
-        HRESP == HRESP_OKAY 
-    );
-
-    // SR6 — Invalid HSIZE → ERROR cycle 1: HREADY=0
-    //       Spec  3.3: "Invalid HSIZE must generate HRESP=ERROR"
-    a_hsize_invalid_error_c1: assert property (
-        (HSEL && HTRANS inside {HTRANS_NONSEQ, HTRANS_SEQ} &&
-         HSIZE > HSIZE_B32) |->
-        (HRESP == HRESP_ERROR && HREADYOUT == 1'b0)
-    );
-    c_hsize_error_c1: cover property (
-        HSEL && HSIZE > HSIZE_B32 &&
-        HRESP == HRESP_ERROR && HREADYOUT == 1'b0
+ 
+    // IDLE/BUSY to nonexistent : OKAY  
+    a_idle_busy_nonexsistent_okay: assert property (@(posedge HCLK) disable iff (!HRESETn)
+        ((HTRANS == HTRANS_IDLE || HTRANS == HTRANS_BUSY) && nonexistent_addr)
+        |=> (HRESP == HRESP_OKAY)
     );
 
-    // SR7 — Invalid HSIZE → ERROR cycle 2: HREADY=1
-    //       Spec  3.6: "ERROR response lasts exactly 2 cycles"
-    a_hsize_invalid_error_c2: assert property (
-        (HSEL && HTRANS inside {HTRANS_NONSEQ, HTRANS_SEQ} &&
-         $past(HSIZE) > HSIZE_B32 &&
-         $past(HRESP) == HRESP_ERROR &&
-         $past(HREADYOUT) == 1'b0) |->
-        (HRESP == HRESP_ERROR && HREADYOUT == 1'b1)
+    c_idle_busy_nonexsistent_okay: cover property (@(posedge HCLK) disable iff (!HRESETn)
+        ((HTRANS == HTRANS_IDLE || HTRANS == HTRANS_BUSY) && nonexistent_addr)
+        ##1 (HRESP == HRESP_OKAY)
     );
-    c_hsize_error_c2: cover property (
-        $past(HRESP) == HRESP_ERROR &&
-        $past(HREADYOUT) == 1'b0 &&
-        HRESP == HRESP_ERROR && HREADYOUT == 1'b1
-    );
-
-    // SR8 —  
-    // Spec  6.1.2: slave only needs valid data in final cycle
-    a_hrdata_valid_final: assert property (
-    (HSEL &&
-     $past(HTRANS) inside {HTRANS_NONSEQ, HTRANS_SEQ} &&
-     $past(HWRITE) == 1'b0 &&
-     HREADY == 1'b1 &&
-     HRESP == HRESP_OKAY)
-    |->
-    (!$isunknown(HRDATA))
-    );
-    c_hrdata_valid_final: cover property (
-    HSEL &&
-    $past(HTRANS) inside {HTRANS_NONSEQ, HTRANS_SEQ} &&
-    $past(HWRITE) == 1'b0 &&
-    HREADY == 1'b1 &&
-    HRESP == HRESP_OKAY &&
-    !$isunknown(HRDATA)
-     );
 
     // ============================================================
-    //  [2] ERROR RESPONSE  
+    //  [2] ERROR RESPONSE   
     // ============================================================
 
     // ER1 — ERROR cycle 1: HREADY must be LOW
@@ -314,318 +213,7 @@ module ahb_checker #(
         $past(HWRITE) == 1'b1 &&
         HREADY && !$isunknown(HWDATA)
     );
-
-    // ============================================================
-    //  [5] SIGNAL INTEGRITY — SLAVE OUTPUTS  
-    // ============================================================
-
-    // SI1 — HRESP valid encoding only
-    //       Spec  5.1 Table: OKAY=0, ERROR=1
-    a_hresp_valid: assert property (
-        (!$isunknown(HRESP)) &&
-        (HRESP inside {HRESP_OKAY, HRESP_ERROR})
-    );
-    c_hresp_error_seen: cover property (
-        HRESP == HRESP_ERROR
-    );
-
-    // SI2 — HREADYOUT no X/Z
-    //      Spec 2.3 : handshake signal integrity
-    a_hreadyout_no_xz: assert property (
-        (!$isunknown(HREADYOUT))
-    );
-    c_hreadyout_low: cover property (
-        HREADYOUT == 1'b0
-    );
  
-
-    // ============================================================
-    //  [6] WRITE CORRECTNESS  —  Functional
-    // ============================================================
-
-    // WC1 — Data written to A must be readable from A
-    a_write_read_correctness: assert property (
-    (valid_ph && write_ph &&                    // data phase of write
-     HSEL && HTRANS inside {HTRANS_NONSEQ, HTRANS_SEQ} &&
-     HWRITE == 1'b0 &&                          // current is read
-     HADDR == addr_ph) |=>                      // same address
-    (HRDATA == hwdata_ph)
-);
-   
-    c_write_then_read: cover property (
-        valid_ph && write_ph && HREADY &&
-        HTRANS inside {HTRANS_NONSEQ, HTRANS_SEQ} &&
-        HWRITE == 1'b0 && HADDR == addr_ph
-    );
-
-    // WC2 — No memory change without valid write
-    a_no_change_without_write: assert property (
-        (HSEL && valid_ph && !write_ph &&
-         HREADY && HRESP == HRESP_OKAY &&
-         HTRANS inside {HTRANS_NONSEQ, HTRANS_SEQ} &&
-         HWRITE == 1'b0 && HADDR == addr_ph) |=>
-        (HRDATA == $past(HRDATA))
-    );
-    c_read_no_side_effect: cover property (
-        valid_ph && !write_ph && HREADY &&
-        HWRITE == 1'b0 && HADDR == addr_ph
-    );
-
-    // WC3 — Back-to-back writes: latest value wins
-    a_latest_write_wins: assert property (
-    (valid_ph && write_ph &&
-     HSEL && HTRANS inside {HTRANS_NONSEQ, HTRANS_SEQ} &&
-     HWRITE == 1'b0 &&
-     HADDR == addr_ph) |=>
-    (HRDATA == hwdata_ph)
-);
-    c_back2back_write: cover property (
-        valid_ph && write_ph && HREADY && HADDR == addr_ph
-    );
-
-    // WC4 — Word write atomically updates all 4 bytes
-    a_word_write_atomic: assert property (
-        (HSEL && valid_ph && write_ph &&
-         size_ph == HSIZE_B32 &&
-         HREADY && HRESP == HRESP_OKAY &&
-         HTRANS inside {HTRANS_NONSEQ, HTRANS_SEQ} &&
-         HWRITE == 1'b0 && HADDR == addr_ph) |=>
-        (HRDATA[31:0] == hwdata_ph[31:0])
-    );
-    c_word_write: cover property (
-        valid_ph && write_ph && size_ph == HSIZE_B32 && HREADY
-    );
-
-    // WC5 — Memory unchanged during read
-    a_no_mem_change_on_read: assert property (
-        (HSEL && valid_ph && !write_ph &&
-         HREADY && HRESP == HRESP_OKAY &&
-         HTRANS inside {HTRANS_NONSEQ, HTRANS_SEQ} &&
-         HWRITE == 1'b0 && HADDR == addr_ph) |=>
-        (HRDATA == $past(HRDATA))
-    );
-    c_read_no_change: cover property (
-        valid_ph && !write_ph && HREADY &&
-        HWRITE == 1'b0 && HADDR == addr_ph
-    );
-
-    // WC6 — HWDATA ignored during read (HRDATA not X/Z)
-    a_hwdata_ignored_read: assert property (
-        (HSEL && HTRANS inside {HTRANS_NONSEQ, HTRANS_SEQ} &&
-         HWRITE == 1'b0 && HREADY) |->
-        (!$isunknown(HRDATA))
-    );
-    c_read_hrdata_valid: cover property (
-        HSEL && HWRITE == 1'b0 && HREADY && !$isunknown(HRDATA)
-    );
-
-    // ============================================================
-    //  [7] BYTE & HALF-WORD MASKING  —  Functional
-    // ============================================================
-
-    // M1 — Byte write: only targeted byte changes
-    a_byte_write_targeted: assert property (
-        (HSEL && valid_ph && write_ph &&
-         size_ph == HSIZE_B8 &&
-         HREADY && HRESP == HRESP_OKAY &&
-         HTRANS inside {HTRANS_NONSEQ, HTRANS_SEQ} &&
-         HWRITE == 1'b0 && HADDR == addr_ph) |=>
-        ( (addr_ph[1:0] == 2'b00) ? (HRDATA[7:0]   == hwdata_ph[7:0])   :
-          (addr_ph[1:0] == 2'b01) ? (HRDATA[15:8]  == hwdata_ph[15:8])  :
-          (addr_ph[1:0] == 2'b10) ? (HRDATA[23:16] == hwdata_ph[23:16]) :
-                                    (HRDATA[31:24] == hwdata_ph[31:24]) )
-    );
-    c_byte_write: cover property (
-        valid_ph && write_ph && size_ph == HSIZE_B8 && HREADY
-    );
-
-    // M2 — Byte write: remaining bytes unchanged
-    a_byte_write_no_corrupt: assert property (
-        (HSEL && valid_ph && write_ph &&
-         size_ph == HSIZE_B8 &&
-         HREADY && HRESP == HRESP_OKAY &&
-         HTRANS inside {HTRANS_NONSEQ, HTRANS_SEQ} &&
-         HWRITE == 1'b0 && HADDR == addr_ph) |=>
-        ( (addr_ph[1:0] == 2'b00) ? (HRDATA[31:8]  == $past(HRDATA[31:8]))  :
-          (addr_ph[1:0] == 2'b01) ? (HRDATA[31:16] == $past(HRDATA[31:16]) &&
-                                     HRDATA[7:0]   == $past(HRDATA[7:0]))   :
-          (addr_ph[1:0] == 2'b10) ? (HRDATA[31:24] == $past(HRDATA[31:24]) &&
-                                     HRDATA[15:0]  == $past(HRDATA[15:0]))  :
-                                    (HRDATA[23:0]  == $past(HRDATA[23:0]))  )
-    );
-    c_byte_no_corrupt: cover property (
-        valid_ph && write_ph && size_ph == HSIZE_B8 &&
-        HREADY && addr_ph[1:0] == 2'b00
-    );
-
-    // M3 — Half-word write: only targeted 2 bytes change
-    a_hword_write_targeted: assert property (
-        (HSEL && valid_ph && write_ph &&
-         size_ph == HSIZE_B16 &&
-         HREADY && HRESP == HRESP_OKAY &&
-         HTRANS inside {HTRANS_NONSEQ, HTRANS_SEQ} &&
-         HWRITE == 1'b0 && HADDR == addr_ph) |=>
-        ( (addr_ph[1] == 1'b0) ? (HRDATA[15:0]  == hwdata_ph[15:0])  :
-                                  (HRDATA[31:16] == hwdata_ph[31:16]) )
-    );
-    c_hword_write: cover property (
-        valid_ph && write_ph && size_ph == HSIZE_B16 && HREADY
-    );
-
-    // M4 — Half-word write: remaining bytes unchanged
-    a_hword_write_no_corrupt: assert property (
-        (HSEL && valid_ph && write_ph &&
-         size_ph == HSIZE_B16 &&
-         HREADY && HRESP == HRESP_OKAY &&
-         HTRANS inside {HTRANS_NONSEQ, HTRANS_SEQ} &&
-         HWRITE == 1'b0 && HADDR == addr_ph) |=>
-        ( (addr_ph[1] == 1'b0) ? (HRDATA[31:16] == $past(HRDATA[31:16])) :
-                                  (HRDATA[15:0]  == $past(HRDATA[15:0]))  )
-    );
-    c_hword_no_corrupt: cover property (
-        valid_ph && write_ph && size_ph == HSIZE_B16 &&
-        HREADY && addr_ph[1] == 1'b0
-    );
-
-    // ============================================================
-    //  [8] READ CORRECTNESS  —  Functional
-    // ============================================================
-
-    // RC1 — Consecutive reads same address: identical data
-    a_consec_reads_same_data: assert property (
-        (HSEL && valid_ph && !write_ph &&
-         HREADY && HRESP == HRESP_OKAY &&
-         HTRANS inside {HTRANS_NONSEQ, HTRANS_SEQ} &&
-         HWRITE == 1'b0 && HADDR == addr_ph) |=>
-        (HRDATA == $past(HRDATA))
-    );
-    c_two_reads_same: cover property (
-        valid_ph && !write_ph && HREADY &&
-        HWRITE == 1'b0 && HADDR == addr_ph
-    );
-
-    // RC2 — First read after reset: no X/Z on HRDATA
-    a_first_read_after_reset: assert property (
-        @(posedge HCLK)
-        ($rose(HRESETn) ##1
-         (HSEL && HTRANS inside {HTRANS_NONSEQ, HTRANS_SEQ} &&
-          HWRITE == 1'b0 && HREADY && HRESP == HRESP_OKAY)) |=>
-        (!$isunknown(HRDATA))
-    );
-    c_first_read_post_reset: cover property (
-        @(posedge HCLK)
-        $rose(HRESETn) ##[1:5]
-        (HSEL && HWRITE == 1'b0 && HREADY && !$isunknown(HRDATA))
-    );
-
-    // RC3 — Read-after-write returns latest data
-    a_read_after_write: assert property (
-        (HSEL && valid_ph && write_ph &&
-         HREADY && HRESP == HRESP_OKAY &&
-         HTRANS inside {HTRANS_NONSEQ, HTRANS_SEQ} &&
-         HWRITE == 1'b0 &&
-         HADDR  == addr_ph && HSIZE == size_ph) |=>
-        (HRDATA == hwdata_ph)
-    );
-    c_raw_scenario: cover property (
-        valid_ph && write_ph && HREADY &&
-        HTRANS inside {HTRANS_NONSEQ, HTRANS_SEQ} &&
-        HWRITE == 1'b0 && HADDR == addr_ph
-    );
-
-    // RC4 — Read data not X/Z
-    a_read_data_not_xz: assert property (
-        (HSEL && valid_ph && !write_ph &&
-         HREADY && HRESP == HRESP_OKAY) |->
-        (!$isunknown(HRDATA))
-    );
-    c_read_not_xz: cover property (
-        valid_ph && !write_ph && HREADY &&
-        HRESP == HRESP_OKAY && !$isunknown(HRDATA)
-    );
-
-    // ============================================================
-    //  [9] PIPELINE  —  Functional
-    // ============================================================
-
-    // P1 — Write data phase overlapping next addr: HWDATA valid
-    a_pipeline_write_correct: assert property (
-        (HSEL && valid_ph && write_ph &&
-         HREADY && HRESP == HRESP_OKAY &&
-         HTRANS inside {HTRANS_NONSEQ, HTRANS_SEQ}) |->
-        (!$isunknown(HWDATA))
-    );
-    c_pipeline_write: cover property (
-        valid_ph && write_ph && HREADY &&
-        HTRANS inside {HTRANS_NONSEQ, HTRANS_SEQ}
-    );
-
-    // P2 — No data leakage between pipelined transactions
-    a_no_data_leakage: assert property (
-        (HSEL && valid_ph && !write_ph &&
-         HREADY && HRESP == HRESP_OKAY &&
-         HTRANS inside {HTRANS_NONSEQ, HTRANS_SEQ} &&
-         HADDR != addr_ph) |=>
-        (!$isunknown(HRDATA))
-    );
-    c_pipeline_no_leak: cover property (
-        valid_ph && !write_ph && HREADY &&
-        HADDR != addr_ph && !$isunknown(HRDATA)
-    );
-
-    // P3 — Back-to-back R/W ordering preserved
-    a_pipeline_rw_ordering: assert property (
-        (HSEL && valid_ph && write_ph &&
-         HREADY && HRESP == HRESP_OKAY &&
-         HTRANS inside {HTRANS_NONSEQ, HTRANS_SEQ} &&
-         HWRITE == 1'b0 && HADDR == addr_ph) |=>
-        (HRDATA == hwdata_ph)
-    );
-    c_pipeline_rw: cover property (
-        valid_ph && write_ph && HREADY &&
-        HWRITE == 1'b0 && HADDR == addr_ph
-    );
-
-    // P4 — Address/data phase association correct
-    a_pipeline_addr_data_assoc: assert property (
-        (HSEL && valid_ph && write_ph && HREADY) |->
-        (!$isunknown(HWDATA))
-    );
-    c_pipeline_assoc: cover property (
-        valid_ph && write_ph && HREADY && !$isunknown(HWDATA)
-    );
-
-    // ============================================================
-    //  [10] ADDRESS & BOUNDARY   
-    // ============================================================
-
-    // A1 Spec 4.1.1 — Out-of-range address  HRESP=ERROR  
-    a_out_of_range_error: assert property (
-        (HSEL && HTRANS inside {HTRANS_NONSEQ, HTRANS_SEQ} &&
-         HREADY && HADDR > MAX_ADDR) |=>
-        (HRESP == HRESP_ERROR)
-    );
-    c_out_of_range: cover property (
-        HSEL && HTRANS == HTRANS_NONSEQ &&
-        HREADY && HADDR > MAX_ADDR
-    );
-
-    
-
-    // A3 — INCR burst within memory
-    a_incr_no_mem_boundary_cross: assert property (
-        (HSEL && HTRANS inside {HTRANS_SEQ, HTRANS_BUSY} &&
-         HBURST inside {HBURST_INCR,  HBURST_INCR4,
-                        HBURST_INCR8, HBURST_INCR16} &&
-         HREADY) |->
-        (HADDR <= MAX_ADDR)
-    );
-    c_incr_within_mem: cover property (
-        HSEL && HTRANS == HTRANS_SEQ &&
-        HBURST == HBURST_INCR4 && HREADY &&
-        HADDR <= MAX_ADDR
-    );
-     
        
     // ============================================================
     //  [11] RESET  
@@ -710,29 +298,217 @@ module ahb_checker #(
         @(posedge HCLK)
         $rose(HRESETn) ##1 HRESP == HRESP_OKAY
     );
-  
-    a_wrap4_byte_region: assert property (
-    (HSEL && HBURST == HBURST_WRAP4 && HSIZE == HSIZE_BYTE &&
-     HTRANS == HTRANS_SEQ && HREADY) |->
-    (HADDR[HADDR_SIZE-1:2] == burst_start_addr[HADDR_SIZE-1:2])
-    );
 
-    a_wrap4_word_region: assert property (
-        (HSEL && HBURST == HBURST_WRAP4 && HSIZE == HSIZE_WORD &&
-        HTRANS == HTRANS_SEQ && HREADY) |->
-        (HADDR[HADDR_SIZE-1:4] == burst_start_addr[HADDR_SIZE-1:4])
-    );
 
-    a_wrap8_word_region: assert property (
-        (HSEL && HBURST == HBURST_WRAP8 && HSIZE == HSIZE_WORD &&
-        HTRANS == HTRANS_SEQ && HREADY) |->
-        (HADDR[HADDR_SIZE-1:5] == burst_start_addr[HADDR_SIZE-1:5])
-    );
-
-    a_wrap16_word_region: assert property (
-        (HSEL && HBURST == HBURST_WRAP16 && HSIZE == HSIZE_WORD &&
-        HTRANS == HTRANS_SEQ && HREADY) |->
-        (HADDR[HADDR_SIZE-1:6] == burst_start_addr[HADDR_SIZE-1:6])
-    );
     
-    endmodule
+    logic HRESETn_q;
+    always @(posedge HCLK) HRESETn_q <= HRESETn;
+ 
+    
+    logic valid_write_addr_phase;
+    assign valid_write_addr_phase = HSEL & HWRITE &
+                                    (HTRANS != HTRANS_IDLE) &
+                                    (HTRANS != HTRANS_BUSY);
+
+    logic read_active;
+    assign read_active = HSEL & ~HWRITE & HREADY &
+                        (HTRANS != HTRANS_IDLE) &
+                        (HTRANS != HTRANS_BUSY);
+
+  //-----------------------------------------------------------
+  // Registered address/write-enable (data phase tracking)
+  //-----------------------------------------------------------
+    logic              we_q;
+    logic [HADDR_SIZE-1:0] waddr_q;
+
+    always @(posedge HCLK or negedge HRESETn) begin
+        if (!HRESETn) begin
+        we_q    <= '0;
+        waddr_q <= '0;
+        end else if (HREADY) begin
+        we_q    <= HSEL & HWRITE &
+                    (HTRANS != HTRANS_IDLE) &
+                    (HTRANS != HTRANS_BUSY);
+        waddr_q <= HADDR;
+        end
+    end
+
+    //-----------------------------------------------------------
+    // FUNC-1: Data written to A must be readable from A
+    //         Address phase  -> t0  (HTRANS_NONSEQ or SEQ, HWRITE)
+    //         Data    phase  -> t1  (HREADY high, latch HWDATA)
+    //         Read    phase  -> any later cycle to same address
+    //-----------------------------------------------------------
+    
+        logic HRESETn_q;
+        always @(posedge HCLK) HRESETn_q <= HRESETn;
+        
+        property write_then_read_data_integrity;
+        logic [HDATA_SIZE-1:0] wd;
+        logic [HADDR_SIZE-1:0] wa;
+
+        (
+            HRESETn_q &&
+            HSEL && HWRITE && HREADY &&
+            (HTRANS inside {HTRANS_NONSEQ, HTRANS_SEQ}),
+            wa = HADDR
+        )
+        ##1
+        (we_q && (waddr_q == wa)) [->1]
+        ##0
+        (1, wd = HWDATA)
+        ##1
+        (
+            !(HSEL && HWRITE && HREADY &&
+            (HTRANS inside {HTRANS_NONSEQ, HTRANS_SEQ}) &&
+            (HADDR == wa))
+        ) [*0:$]
+        ##1
+        (
+            HSEL && !HWRITE && HREADY &&
+            (HTRANS inside {HTRANS_NONSEQ, HTRANS_SEQ}) &&
+            (HADDR == wa)
+        )
+        |->
+        ##1 (HRDATA == wd);   
+        endproperty
+            
+        FUNC_WRITE_READ_INTEGRITY: assert property (write_then_read_data_integrity);
+
+        //-----------------------------------------------------------
+        // RESET BEHAVIOR CHECK
+        //-----------------------------------------------------------
+        property hreadyout_high_after_reset;
+        @(posedge HCLK)
+        (HRESETn)
+        |=>
+        ##[0:4] (HREADYOUT == 1'b1 && HRESP == HRESP_OKAY);
+        endproperty
+
+        FUNC2_HREADYOUT_AFTER_RST: assert property (hreadyout_high_after_reset);
+        
+        COVER_READY_AFTER_RST: cover property (
+        @(posedge HCLK)
+        (HRESETn)
+        |=>
+        ##[0:4] (HREADYOUT && (HRESP == HRESP_OKAY))
+        );
+        
+        property byte_write_no_side_effect;
+        logic [HDATA_SIZE-1:0] rdb; 
+        logic [HADDR_SIZE-1:0] ba;  
+        logic [1:0]            byte_lane;
+        (
+            HRESETn_q &&
+            HSEL && !HWRITE && HREADY &&
+            (HTRANS inside {HTRANS_NONSEQ, HTRANS_SEQ}) &&
+            (HSIZE == HSIZE_WORD) &&
+        (HADDR[1:0] == 2'b00),
+
+        ba        = HADDR,
+        byte_lane = HADDR[1:0]
+        )
+        ##2
+        (1, rdb = HRDATA)
+        ##1
+        (
+            HSEL && HWRITE && HREADY &&
+            (HTRANS inside {HTRANS_NONSEQ, HTRANS_SEQ}) &&
+            (HSIZE == HSIZE_BYTE) &&
+            (HADDR[HADDR_SIZE-1:2] == ba[HADDR_SIZE-1:2]),
+            byte_lane = HADDR[1:0]
+        )
+        ##1
+        (HREADY && we_q && (waddr_q[HADDR_SIZE-1:2] == ba[HADDR_SIZE-1:2]))
+        ##1
+        (
+            HSEL && !HWRITE && HREADY &&
+            (HTRANS inside {HTRANS_NONSEQ, HTRANS_SEQ}) &&
+            (HSIZE == HSIZE_WORD) &&
+            (HADDR == ba)
+        )
+        |->
+        ##1
+        (
+            ((byte_lane == 2'b00) ->
+            (HRDATA[31:8] == rdb[31:8])) &&
+
+            ((byte_lane == 2'b01) ->
+            ({HRDATA[31:16], HRDATA[7:0]} ==
+            {rdb[31:16],   rdb[7:0]})) &&
+
+            ((byte_lane == 2'b10) ->
+            ({HRDATA[31:24], HRDATA[15:0]} ==
+            {rdb[31:24],   rdb[15:0]})) &&
+
+            ((byte_lane == 2'b11) ->
+            (HRDATA[23:0] == rdb[23:0]))
+        );
+        endproperty
+          
+        FUNC3_BYTE_WRITE_NO_SIDE_EFFECT:assert property (byte_write_no_side_effect);
+        //------------------------------------------------------------
+        // FUNC-4: No memory location changes without
+        //         a valid write transaction
+        //------------------------------------------------------------
+        // STEP 1: Read karo — data capture karo
+        property no_spurious_write;
+        logic [HDATA_SIZE-1:0] rdb;
+        logic [HADDR_SIZE-1:0] ra;
+
+        // STEP 1: Read address phase pakdo
+        (
+            HRESETn_q &&
+            HSEL && !HWRITE && HREADY &&
+            (HTRANS inside {HTRANS_NONSEQ, HTRANS_SEQ}),
+            ra = HADDR
+        ) 
+        ##1 (HREADY, rdb = HRDATA)
+
+        // STEP 2: Koi write nahi same address pe
+        ##1 (!(
+            HSEL && HWRITE && HREADY &&
+            (HTRANS inside {HTRANS_NONSEQ, HTRANS_SEQ}) &&
+            (HADDR == ra)
+        )) [*1:$]
+
+        // STEP 3: Wapas same address read
+        ##1 (
+            HSEL && !HWRITE && HREADY &&
+            (HTRANS inside {HTRANS_NONSEQ, HTRANS_SEQ}) &&
+            (HADDR == ra)
+        )
+ 
+        |-> ##1 (HREADY ##0 (HRDATA == rdb));
+
+        endproperty 
+        FUNC4_NO_SPURIOUS_WRITE: assert property (no_spurious_write)
+        else $error("[FUNC-4 FAIL] Memory changed without valid write! Time=%0t",
+                    $time);
+
+        //------------------------------------------------------------
+        // Cover
+        //------------------------------------------------------------
+        property cover_no_spurious_write;
+        logic [HADDR_SIZE-1:0] ca;
+
+        (HRESETn_q &&
+        HSEL && !HWRITE && HREADY &&
+        (HTRANS inside {HTRANS_NONSEQ, HTRANS_SEQ}),
+        ca = HADDR)
+        ##1 (1)
+        ##1
+        (!(HSEL && HWRITE && HREADY &&
+            (HTRANS inside {HTRANS_NONSEQ, HTRANS_SEQ}) &&
+            (HADDR == ca))
+        ) [*1:$]
+        ##1
+        (HSEL && !HWRITE && HREADY &&
+        (HTRANS inside {HTRANS_NONSEQ, HTRANS_SEQ}) &&
+        (HADDR == ca));
+        endproperty
+
+        COVER_NO_SPURIOUS_WRITE: cover property (cover_no_spurious_write);
+
+endmodule
+

@@ -4,21 +4,7 @@
 //  DUT      : ahb3lite_sram (RoaLogic)
 //  Role     : B — Assertions & Formal
 //  Spec     : ARM IHI0033A
-//
-//  Purpose  : Constrain the formal tool to only explore
-//             legal AHB-Lite master behaviour.
-//             Without these, JasperGold will drive illegal
-//             stimulus and generate false counterexamples.
-//
-//  Sections:
-//  [1] HTRANS State Machine   — legal transfer sequences
-//  [2] Address Constraints    — alignment, 1KB, stability
-//  [3] Burst Constraints      — HBURST/HSIZE/HWRITE stability
-//  [4] Data Constraints       — HWDATA validity
-//  [5] Signal Integrity       — no X/Z on master signals
-//  [6] Reset Constraints      — master reset behaviour
-// ============================================================
-
+ 
 import ahb3lite_pkg::*;
 
 module ahb_assumptions #(
@@ -38,12 +24,10 @@ module ahb_assumptions #(
     input                       HREADY,
     input                       HRESP
 );
-
-    // ---- default clocking & disable iff ------------------------
+ 
     default clocking ahb_clk @(posedge HCLK); endclocking
     default disable iff (!HRESETn);
-
-    // ---- max valid address -------------------------------------
+ 
     localparam [HADDR_SIZE-1:0] MAX_ADDR =
         (MEM_DEPTH * (HDATA_SIZE/8)) - 1;
 
@@ -137,6 +121,7 @@ module ahb_assumptions #(
         (HSEL && $past(HRESP) == HRESP_ERROR && HREADY) |=>
         (HTRANS inside {HTRANS_IDLE, HTRANS_NONSEQ})
     );
+ 
     // ============================================================
     //  [2] ADDRESS CONSTRAINTS
     // ============================================================
@@ -213,7 +198,6 @@ module ahb_assumptions #(
     );
 
     // AM19 — HSIZE must remain constant throughout burst
-    //       "HSIZE must remain constant throughout burst"
     am_hsize_constant_burst: assume property (
         (HSEL && HTRANS inside {HTRANS_SEQ, HTRANS_BUSY} && HREADY) |->
         (HSIZE == $past(HSIZE))
@@ -248,7 +232,6 @@ module ahb_assumptions #(
           HBURST == $past(HBURST) &&
           HWRITE == $past(HWRITE) )
     );
-
     // ============================================================
     //  [4] DATA CONSTRAINTS
     // ============================================================
@@ -269,7 +252,7 @@ module ahb_assumptions #(
         (HSEL && HREADY == 1'b1 &&
          $past(HTRANS) inside {HTRANS_NONSEQ, HTRANS_SEQ} &&
          $past(HWRITE) == 1'b1) |->
-        (!$isunknown(HWDATA))
+        (!$isunknown(HWDATA)  )
     );
 
     // ============================================================
@@ -396,4 +379,5 @@ module ahb_assumptions #(
         (HADDR[HADDR_SIZE-1:6] == burst_start_addr[HADDR_SIZE-1:6] ||
         HTRANS == HTRANS_NONSEQ)
     );
-endmodule
+endmodule     
+   
